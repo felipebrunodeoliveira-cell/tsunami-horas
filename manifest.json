@@ -1,0 +1,14 @@
+{
+  "name": "SEW Banco de Horas",
+  "short_name": "SEW Horas",
+  "description": "Controle de horas extra SEW-Eurodrive",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#E30018",
+  "theme_color": "#E30018",
+  "orientation": "portrait",
+  "icons": [
+    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png" }
+  ]
+}

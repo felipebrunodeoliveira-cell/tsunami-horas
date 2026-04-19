@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="SEW Horas">
+<meta name="theme-color" content="#E30018">
+<link rel="manifest" href="manifest.json">
+<title>SEW Banco de Horas</title>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+  :root{
+    --red:#E30018;--red-dark:#B8001A;--red-light:#fdeced;
+    --green:#1a7a3a;--green-light:#e8f5ee;
+    --bg:#f5f5f5;--card:#ffffff;--border:#e0e0e0;
+    --text:#1a1a1a;--text2:#666;--text3:#999;
+  }
+  html,body{height:100%;background:var(--bg);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;color:var(--text);font-size:16px}
+
+  /* LAYOUT */
+  #app{display:flex;flex-direction:column;min-height:100vh;max-width:480px;margin:0 auto}
+  .screen{display:none;flex-direction:column;flex:1}
+  .screen.active{display:flex}
+
+  /* HEADER */
+  .header{background:var(--red);padding:env(safe-area-inset-top,0) 0 0;flex-shrink:0}
+  .header-inner{padding:14px 16px 14px;display:flex;align-items:center;gap:10px}
+  .logo{line-height:1}
+  .logo-sew{font-size:20px;font-weight:800;color:#fff;letter-spacing:-.5px}
+  .logo-sub{font-size:9px;font-weight:600;color:rgba(255,255,255,.75);letter-spacing:1.5px;text-transform:uppercase}
+  .divider-v{width:1px;height:30px;background:rgba(255,255,255,.3)}
+  .header-label{font-size:13px;font-weight:500;color:#fff}
+  .header-date{margin-left:auto;font-size:12px;color:rgba(255,255,255,.75)}
+
+  /* NAV TABS */
+  .tabs{display:flex;background:var(--red-dark);padding:0 4px}
+  .tab{flex:1;padding:10px 4px;font-size:12px;font-weight:600;color:rgba(255,255,255,.6);text-align:center;cursor:pointer;border-bottom:2px solid transparent;transition:all .15s;letter-spacing:.3px;text-transform:uppercase}
+  .tab.active{color:#fff;border-bottom-color:#fff}
+
+  /* CARDS */
+  .content{flex:1;overflow-y:auto;padding:12px}
+  .card{background:var(--card);border-radius:12px;border:1px solid var(--border);padding:16px;margin-bottom:10px}
+  .card-title{font-size:11px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.8px;margin-bottom:12px}
+
+  /* METRICS */
+  .metrics-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px}
+  .metric{background:var(--card);border-radius:12px;border:1px solid var(--border);padding:14px}
+  .metric-label{font-size:11px;color:var(--text2);margin-bottom:6px}
+  .metric-value{font-size:28px;font-weight:700;line-height:1;color:var(--text)}
+  .metric-value.pos{color:var(--green)}
+  .metric-value.neg{color:var(--red)}
+  .metric-value.accent{color:var(--red)}
+  .progress-bar{height:3px;background:#eee;border-radius:2px;margin-top:8px;overflow:hidden}
+  .progress-fill{height:100%;border-radius:2px;transition:width .5s}
+
+  /* FORM */
+  .field{margin-bottom:14px}
+  .field label{display:block;font-size:13px;font-weight:500;color:var(--text2);margin-bottom:6px}
+  .field input{width:100%;height:44px;padding:0 12px;border:1px solid var(--border);border-radius:8px;font-size:15px;color:var(--text);background:var(--card);outline:none;-webkit-appearance:none}
+  .field input:focus{border-color:var(--red);box-shadow:0 0 0 3px rgba(227,0,24,.1)}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+
+  /* TAGS */
+  .tag-row{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px}
+  .tag{font-size:12px;padding:7px 14px;border-radius:20px;border:1px solid var(--border);cursor:pointer;color:var(--text2);background:var(--card);font-weight:500;transition:all .15s}
+  .tag.active{background:var(--red);color:#fff;border-color:var(--red)}
+
+  /* INFO BAR */
+  .info-bar{font-size:13px;padding:10px 12px;border-radius:8px;margin-bottom:12px;line-height:1.4}
+  .info-bar.neutral{background:#f0f0f0;color:var(--text2)}
+  .info-bar.good{background:var(--green-light);color:#0e5a29;border-left:3px solid var(--green)}
+  .info-bar.warn{background:var(--red-light);color:#8a0010;border-left:3px solid var(--red)}
+
+  /* BUTTONS */
+  .btn{width:100%;height:48px;border:none;border-radius:10px;font-size:15px;font-weight:600;cursor:pointer;transition:all .15s}
+  .btn:active{transform:scale(.98)}
+  .btn-primary{background:var(--red);color:#fff}
+  .btn-primary:active{background:var(--red-dark)}
+  .btn-ghost{background:transparent;border:1px solid var(--border);color:var(--text2);margin-top:8px}
+
+  /* LOG LIST */
+  .log-item{display:flex;align-items:center;gap:10px;padding:12px 0;border-bottom:1px solid #f0f0f0}
+  .log-item:last-child{border-bottom:none}
+  .log-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+  .log-dot.pos{background:var(--green)}
+  .log-dot.neg{background:var(--red)}
+  .log-dot.spec{background:#f59e0b}
+  .log-info{flex:1;min-width:0}
+  .log-date{font-size:14px;font-weight:600;color:var(--text)}
+  .log-sub{font-size:12px;color:var(--text2);margin-top:1px}
+  .badge100{display:inline-block;font-size:9px;padding:1px 5px;border-radius:4px;font-weight:800;margin-left:4px;background:#f59e0b;color:#fff;vertical-align:middle}
+  .log-extra{font-size:15px;font-weight:700;flex-shrink:0}
+  .log-extra.pos{color:var(--green)}
+  .log-extra.neg{color:var(--red)}
+  .log-del{background:none;border:none;cursor:pointer;color:var(--text3);font-size:16px;padding:4px;flex-shrink:0}
+
+  /* SETUP */
+  .setup-logo{text-align:center;padding:32px 0 24px}
+  .setup-logo-sew{font-size:40px;font-weight:900;color:var(--red);letter-spacing:-1px}
+  .setup-logo-sub{font-size:11px;font-weight:700;color:var(--text2);letter-spacing:3px;text-transform:uppercase;margin-top:2px}
+  .setup-desc{font-size:14px;color:var(--text2);text-align:center;margin-bottom:24px;line-height:1.5}
+  .jornada-info{background:#f8f8f8;border-radius:10px;padding:12px 16px;margin-bottom:16px}
+  .jornada-info p{font-size:13px;color:var(--text2);line-height:2}
+  .jornada-info strong{color:var(--text);font-weight:600}
+
+  /* EMPTY */
+  .empty{text-align:center;padding:32px 0;color:var(--text3);font-size:14px}
+
+  /* SAFE AREA BOTTOM */
+  .safe-bottom{height:env(safe-area-inset-bottom, 0)}
+</style>
+</head>
+<body>
+<div id="app">
+
+  <!-- ===== SETUP SCREEN ===== -->
+  <div id="screen-setup" class="screen active">
+    <div class="content" style="justify-content:center">
+      <div class="setup-logo">
+        <div class="setup-logo-sew">SEW</div>
+        <div class="setup-logo-sub">Eurodrive</div>
+      </div>
+      <p class="setup-desc">Bem-vindo ao controle de<br>banco de horas</p>
+      <div class="card">
+        <div class="card-title">Configuração inicial</div>
+        <div class="field">
+          <label>Saldo atual de horas</label>
+          <input type="number" id="setup-balance" placeholder="Ex: 12.5 ou -3.0" step="0.5" inputmode="decimal">
+        </div>
+        <div class="info-bar neutral" style="margin-bottom:16px;font-size:12px">
+          Use valor negativo se você estiver devendo horas. Exemplo: <strong>-5.5</strong>
+        </div>
+        <div class="jornada-info">
+          <p><strong>Seg a Qui</strong> — 07:00 às 17:00 (9h/dia)</p>
+          <p><strong>Sexta</strong> — 07:00 às 16:00 (8h/dia)</p>
+        </div>
+        <button class="btn btn-primary" onclick="saveSetup()">Começar</button>
+      </div>
+    </div>
+    <div class="safe-bottom"></div>
+  </div>
+
+  <!-- ===== MAIN SCREEN ===== -->
+  <div id="screen-main" class="screen">
+    <div class="header">
+      <div class="header-inner">
+        <div class="logo">
+          <div class="logo-sew">SEW</div>
+          <div class="logo-sub">EURODRIVE</div>
+        </div>
+        <div class="divider-v"></div>
+        <span class="header-label">Banco de Horas</span>
+        <span class="header-date" id="header-date"></span>
+      </div>
+      <div class="tabs">
+        <div class="tab active" onclick="showTab('resumo')">Resumo</div>
+        <div class="tab" onclick="showTab('lancar')">Lançar</div>
+        <div class="tab" onclick="showTab('historico')">Histórico</div>
+      </div>
+    </div>
+
+    <!-- TAB: RESUMO -->
+    <div id="tab-resumo" class="content">
+      <div class="metrics-grid">
+        <div class="metric">
+          <div class="metric-label">Saldo atual</div>
+          <div class="metric-value" id="bal-val">0h00</div>
+          <div class="progress-bar"><div class="progress-fill" id="bal-bar" style="width:0%"></div></div>
+        </div>
+        <div class="metric">
+          <div class="metric-label">Extras 100%</div>
+          <div class="metric-value accent" id="extra100-val">0h00</div>
+        </div>
+      </div>
+      <div class="metrics-grid">
+        <div class="metric">
+          <div class="metric-label">Dias lançados</div>
+          <div class="metric-value" id="days-val" style="font-size:32px">0</div>
+        </div>
+        <div class="metric">
+          <div class="metric-label">Total trabalhado</div>
+          <div class="metric-value" id="total-val" style="font-size:22px">0h00</div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">Últimos lançamentos</div>
+        <div id="recent-list"><div class="empty">Nenhum lançamento ainda</div></div>
+      </div>
+      <button class="btn btn-ghost" onclick="showSetup()">Ajustar saldo inicial</button>
+      <div class="safe-bottom"></div>
+    </div>
+
+    <!-- TAB: LANÇAR -->
+    <div id="tab-lancar" class="content" style="display:none">
+      <div class="card">
+        <div class="card-title">Novo lançamento</div>
+        <div class="field">
+          <label>Data</label>
+          <input type="date" id="entry-date">
+        </div>
+        <div id="day-info" class="info-bar warn" style="display:none"></div>
+        <div class="field">
+          <label>Tipo</label>
+          <div class="tag-row">
+            <span class="tag active" data-type="normal" onclick="setType('normal')">Normal</span>
+            <span class="tag" data-type="half" onclick="setType('half')">Antecipado</span>
+            <span class="tag" data-type="extra" onclick="setType('extra')">Hora extra</span>
+            <span class="tag" data-type="full100" onclick="setType('full100')">100% (fer/dom)</span>
+          </div>
+        </div>
+        <div class="grid2">
+          <div class="field">
+            <label>Entrada</label>
+            <input type="time" id="entrada" value="07:00">
+          </div>
+          <div class="field">
+            <label>Saída</label>
+            <input type="time" id="saida" value="17:00">
+          </div>
+        </div>
+        <div id="preview" class="info-bar" style="display:none"></div>
+        <button class="btn btn-primary" onclick="addEntry()">Lançar dia</button>
+      </div>
+      <div class="safe-bottom"></div>
+    </div>
+
+    <!-- TAB: HISTÓRICO -->
+    <div id="tab-historico" class="content" style="display:none">
+      <div class="card">
+        <div class="card-title">Todos os lançamentos</div>
+        <div id="full-list"><div class="empty">Nenhum lançamento ainda</div></div>
+      </div>
+      <div class="safe-bottom"></div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+const HOLIDAYS=['2025-01-01','2025-02-03','2025-02-04','2025-04-18','2025-04-19','2025-04-21','2025-05-01','2025-06-19','2025-09-07','2025-10-12','2025-11-02','2025-11-15','2025-11-20','2025-12-08','2025-12-25','2026-01-01','2026-02-16','2026-02-17','2026-04-03','2026-04-04','2026-04-21','2026-05-01','2026-06-04','2026-09-07','2026-10-12','2026-11-02','2026-11-15','2026-11-20','2026-12-08','2026-12-25'];
+const HNAMES={'01-01':'Confraternização Universal','02-03':'Carnaval','02-04':'Carnaval','02-16':'Carnaval','02-17':'Carnaval','04-03':'Paixão de Cristo','04-04':'Paixão de Cristo','04-18':'Paixão de Cristo','04-19':'Paixão de Cristo','04-21':'Tiradentes','05-01':'Dia do Trabalhador','06-04':'Corpus Christi','06-19':'Corpus Christi','09-07':'Independência','10-12':'N. Sra. Aparecida','11-02':'Finados','11-15':'Proclamação da República','11-20':'Consciência Negra','12-08':'Imaculada Conceição','12-25':'Natal'};
+const WEEK=['Dom','Seg','Ter','Qua','Qui','Sex','Sáb'];
+const MTHS=['jan','fev','mar','abr','mai','jun','jul','ago','set','out','nov','dez'];
+
+let S={balance:0,entries:[],extra100:0,totalWorked:0};
+let selType='normal';
+
+function save(){localStorage.setItem('sew_state',JSON.stringify(S))}
+function load(){try{const d=localStorage.getItem('sew_state');if(d){S=JSON.parse(d);return true}}catch(e){}return false}
+function toMin(t){const[h,m]=t.split(':').map(Number);return h*60+m}
+function fmtH(min){const neg=min<0;const a=Math.abs(Math.round(min));return(neg?'-':'')+Math.floor(a/60)+'h'+String(a%60).padStart(2,'0')}
+function isHol(d){return HOLIDAYS.includes(d)}
+function isSun(d){return new Date(d+'T12:00:00').getDay()===0}
+function isSpec(d){return isHol(d)||isSun(d)}
+function getHolName(d){return HNAMES[d.slice(5)]||'Feriado'}
+function getDow(d){return new Date(d+'T12:00:00').getDay()}
+function getDailyMin(d){return getDow(d)===5?480:540}
+function getDefOut(d){return getDow(d)===5?'16:00':'17:00'}
+function getDayLabel(d){const dt=new Date(d+'T12:00:00');return WEEK[dt.getDay()]+' '+dt.getDate()+' '+MTHS[dt.getMonth()]}
+
+function saveSetup(){
+  const v=parseFloat(document.getElementById('setup-balance').value)||0;
+  S={balance:Math.round(v*60),entries:[],extra100:0,totalWorked:0};
+  save();
+  document.getElementById('screen-setup').classList.remove('active');
+  document.getElementById('screen-main').classList.add('active');
+  const today=new Date().toISOString().slice(0,10);
+  document.getElementById('entry-date').value=today;
+  updateDateInfo();updateUI();
+}
+function showSetup(){
+  document.getElementById('setup-balance').value=(S.balance/60).toFixed(1);
+  document.getElementById('screen-main').classList.remove('active');
+  document.getElementById('screen-setup').classList.add('active');
+}
+function showTab(t){
+  ['resumo','lancar','historico'].forEach(id=>{
+    document.getElementById('tab-'+id).style.display=id===t?'':'none';
+  });
+  document.querySelectorAll('.tab').forEach((el,i)=>{
+    el.classList.toggle('active',['resumo','lancar','historico'][i]===t);
+  });
+}
+function setType(t){
+  selType=t;
+  document.querySelectorAll('.tag').forEach(el=>el.classList.toggle('active',el.dataset.type===t));
+  updatePreview();
+}
+function updateDateInfo(){
+  const d=document.getElementById('entry-date').value;
+  if(!d)return;
+  document.getElementById('saida').value=getDefOut(d);
+  const bar=document.getElementById('day-info');
+  const dow=getDow(d);
+  if(dow===6){bar.style.display='block';bar.textContent='Sábado — normalmente não é dia de trabalho.';if(selType==='full100')setType('normal');}
+  else if(isHol(d)){bar.style.display='block';bar.textContent='Feriado: '+getHolName(d)+' — conta 100%.';if(selType==='normal')setType('full100');}
+  else if(isSun(d)){bar.style.display='block';bar.textContent='Domingo — conta 100%.';if(selType==='normal')setType('full100');}
+  else{bar.style.display='none';if(selType==='full100')setType('normal');}
+  updatePreview();
+}
+function calcResult(){
+  const d=document.getElementById('entry-date').value;
+  const ent=document.getElementById('entrada').value;
+  const sai=document.getElementById('saida').value;
+  if(!d||!ent||!sai)return null;
+  const worked=toMin(sai)-toMin(ent)-60;
+  const daily=getDailyMin(d);
+  const spec=isSpec(d)||selType==='full100';
+  if(spec)return{extra:worked*2,raw:worked,spec:true};
+  return{extra:worked-daily,raw:worked,spec:false};
+}
+function updatePreview(){
+  const bar=document.getElementById('preview');
+  const r=calcResult();
+  if(!r){bar.style.display='none';return;}
+  bar.style.display='block';
+  if(r.spec){bar.className='info-bar warn';bar.textContent='Trabalhado: '+fmtH(r.raw)+' × 2 = '+fmtH(r.extra)+' creditados (100%)';}
+  else if(r.extra>0){bar.className='info-bar good';bar.textContent='Horas extras: +'+fmtH(r.extra)+' no saldo';}
+  else if(r.extra<0){bar.className='info-bar warn';bar.textContent='Saída antecipada: '+fmtH(r.extra)+' no saldo';}
+  else{bar.className='info-bar neutral';bar.textContent='Jornada completa — saldo inalterado';}
+}
+function addEntry(){
+  const d=document.getElementById('entry-date').value;
+  if(!d){alert('Selecione a data');return;}
+  const ent=document.getElementById('entrada').value;
+  const sai=document.getElementById('saida').value;
+  if(!ent||!sai){alert('Preencha entrada e saída');return;}
+  const r=calcResult();if(!r)return;
+  S.entries.unshift({date:d,entrada:ent,saida:sai,extra:r.extra,raw:r.raw,spec:r.spec,id:Date.now()});
+  S.balance+=r.extra;
+  S.totalWorked+=r.raw;
+  if(r.spec)S.extra100+=r.extra;
+  save();updateUI();
+  showTab('resumo');
+}
+function deleteEntry(id){
+  const idx=S.entries.findIndex(e=>e.id===id);if(idx<0)return;
+  const e=S.entries[idx];
+  S.balance-=e.extra;S.totalWorked-=e.raw;
+  if(e.spec)S.extra100-=e.extra;
+  S.entries.splice(idx,1);save();updateUI();
+}
+function renderLog(entries,limit){
+  if(!entries.length)return'<div class="empty">Nenhum lançamento ainda</div>';
+  const list=limit?entries.slice(0,limit):entries;
+  return list.map(e=>{
+    const pos=e.extra>=0;
+    const dotCls=e.spec?'spec':pos?'pos':'neg';
+    const badge=e.spec?'<span class="badge100">100%</span>':'';
+    return`<div class="log-item">
+      <div class="log-dot ${dotCls}"></div>
+      <div class="log-info">
+        <div class="log-date">${getDayLabel(e.date)}${badge}</div>
+        <div class="log-sub">${e.entrada} – ${e.saida}</div>
+      </div>
+      <div class="log-extra ${pos?'pos':'neg'}">${pos?'+':''}${fmtH(e.extra)}</div>
+      <button class="log-del" onclick="deleteEntry(${e.id})">✕</button>
+    </div>`;
+  }).join('');
+}
+function updateUI(){
+  const b=S.balance;
+  const el=document.getElementById('bal-val');
+  el.textContent=fmtH(Math.abs(b));
+  el.className='metric-value '+(b>=0?'pos':'neg');
+  if(b<0)el.textContent='-'+fmtH(Math.abs(b));
+  const pct=Math.min(100,Math.abs(b)/600*100);
+  const bar=document.getElementById('bal-bar');
+  bar.style.width=pct+'%';
+  bar.style.background=b>=0?'var(--green)':'var(--red)';
+  document.getElementById('extra100-val').textContent=fmtH(S.extra100);
+  document.getElementById('days-val').textContent=S.entries.length;
+  document.getElementById('total-val').textContent=fmtH(S.totalWorked);
+  document.getElementById('recent-list').innerHTML=renderLog(S.entries,5);
+  document.getElementById('full-list').innerHTML=renderLog(S.entries,0);
+}
+
+// Init
+const now=new Date();
+document.getElementById('header-date').textContent=now.toLocaleDateString('pt-BR',{weekday:'short',day:'numeric',month:'short'});
+document.getElementById('entry-date').value=now.toISOString().slice(0,10);
+
+if(load()&&S.entries!==undefined){
+  document.getElementById('screen-setup').classList.remove('active');
+  document.getElementById('screen-main').classList.add('active');
+  updateDateInfo();updateUI();
+}
+
+document.getElementById('entry-date').addEventListener('change',updateDateInfo);
+document.getElementById('entrada').addEventListener('change',updatePreview);
+document.getElementById('saida').addEventListener('change',updatePreview);
+
+if('serviceWorker' in navigator){
+  navigator.serviceWorker.register('./sw.js').catch(()=>{});
+}
+</script>
+</body>
+</html>
