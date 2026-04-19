@@ -351,7 +351,7 @@ html,body{height:100%;background:var(--bg);font-family:-apple-system,BlinkMacSys
 
 <script type="module">
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
-import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
+import { getAuth, GoogleAuthProvider, signInWithRedirect, signOut, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
 import { getFirestore, doc, getDoc, setDoc, updateDoc, collection, addDoc, getDocs, deleteDoc, query, orderBy } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
 
 const firebaseConfig = {
@@ -366,6 +366,11 @@ const firebaseConfig = {
 const fbApp = initializeApp(firebaseConfig);
 const auth = getAuth(fbApp);
 const db = getFirestore(fbApp);
+
+// Handle redirect result on page load
+getRedirectResult(auth).then(result => {
+  if(result?.user) console.log('Redirect login ok');
+}).catch(e => { if(e.code !== 'auth/no-current-user') console.error(e); });
 
 const DAYS=['Dom','Seg','Ter','Qua','Qui','Sex','Sáb'];
 const MONTHS=['jan','fev','mar','abr','mai','jun','jul','ago','set','out','nov','dez'];
@@ -418,7 +423,7 @@ function toast(msg,type='success'){
 window.loginGoogle=async function(){
   try{
     const provider=new GoogleAuthProvider();
-    await signInWithPopup(auth,provider);
+    await signInWithRedirect(auth,provider);
   }catch(e){toast('Erro ao fazer login','error')}
 }
 
