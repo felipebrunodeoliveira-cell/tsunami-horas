@@ -4,265 +4,417 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="default">
-<meta name="apple-mobile-web-app-title" content="SEW Horas">
-<meta name="theme-color" content="#E30018">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Tsunami Horas">
+<meta name="theme-color" content="#0a0e1a">
 <link rel="manifest" href="manifest.json">
-<title>SEW Banco de Horas</title>
+<title>Tsunami Horas</title>
 <style>
-  *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
-  :root{
-    --red:#E30018;--red-dark:#B8001A;--red-light:#fdeced;
-    --green:#1a7a3a;--green-light:#e8f5ee;
-    --bg:#f5f5f5;--card:#ffffff;--border:#e0e0e0;
-    --text:#1a1a1a;--text2:#666;--text3:#999;
-  }
-  html,body{height:100%;background:var(--bg);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;color:var(--text);font-size:16px}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+:root{
+  --bg:#0a0e1a;
+  --surface:#0d1220;
+  --surface2:#111827;
+  --border:#1e2a42;
+  --border2:#2a3a55;
+  --cyan:#00d4ff;
+  --cyan-dim:#00d4ff22;
+  --cyan-mid:#00d4ff55;
+  --violet:#7c3aed;
+  --violet-dim:#7c3aed22;
+  --text:#e2e8f0;
+  --text2:#8899aa;
+  --text3:#4a5568;
+  --green:#10b981;
+  --green-dim:#10b98122;
+  --red:#f43f5e;
+  --red-dim:#f43f5e22;
+  --amber:#f59e0b;
+  --amber-dim:#f59e0b22;
+}
+html,body{height:100%;background:var(--bg);font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','Segoe UI',sans-serif;color:var(--text);font-size:16px;overflow-x:hidden}
 
-  /* LAYOUT */
-  #app{display:flex;flex-direction:column;min-height:100vh;max-width:480px;margin:0 auto}
-  .screen{display:none;flex-direction:column;flex:1}
-  .screen.active{display:flex}
+/* STRUCTURE */
+#app{display:flex;flex-direction:column;min-height:100vh;max-width:480px;margin:0 auto}
+.screen{display:none;flex-direction:column;flex:1}
+.screen.active{display:flex}
 
-  /* HEADER */
-  .header{background:var(--red);padding:env(safe-area-inset-top,0) 0 0;flex-shrink:0}
-  .header-inner{padding:14px 16px 14px;display:flex;align-items:center;gap:10px}
-  .logo{line-height:1}
-  .logo-sew{font-size:20px;font-weight:800;color:#fff;letter-spacing:-.5px}
-  .logo-sub{font-size:9px;font-weight:600;color:rgba(255,255,255,.75);letter-spacing:1.5px;text-transform:uppercase}
-  .divider-v{width:1px;height:30px;background:rgba(255,255,255,.3)}
-  .header-label{font-size:13px;font-weight:500;color:#fff}
-  .header-date{margin-left:auto;font-size:12px;color:rgba(255,255,255,.75)}
+/* HEADER */
+.header{background:var(--surface);border-bottom:1px solid var(--border);padding:env(safe-area-inset-top,0) 0 0;flex-shrink:0}
+.header-inner{padding:14px 16px;display:flex;align-items:center;gap:10px}
+.logo-mark svg{display:block}
+.brand{display:flex;flex-direction:column;gap:1px}
+.brand-name{font-size:17px;font-weight:800;color:var(--text);letter-spacing:-.5px;line-height:1}
+.brand-sub{font-size:8px;font-weight:700;color:var(--cyan);letter-spacing:3px;text-transform:uppercase}
+.header-right{margin-left:auto;display:flex;align-items:center;gap:8px}
+.header-date{font-size:12px;color:var(--text2)}
 
-  /* NAV TABS */
-  .tabs{display:flex;background:var(--red-dark);padding:0 4px}
-  .tab{flex:1;padding:10px 4px;font-size:12px;font-weight:600;color:rgba(255,255,255,.6);text-align:center;cursor:pointer;border-bottom:2px solid transparent;transition:all .15s;letter-spacing:.3px;text-transform:uppercase}
-  .tab.active{color:#fff;border-bottom-color:#fff}
+/* TABS */
+.tabs{display:flex;border-bottom:1px solid var(--border)}
+.tab{flex:1;padding:11px 4px;font-size:11px;font-weight:700;color:var(--text3);text-align:center;cursor:pointer;border-bottom:2px solid transparent;letter-spacing:.5px;text-transform:uppercase;transition:all .2s}
+.tab.active{color:var(--cyan);border-bottom-color:var(--cyan)}
 
-  /* CARDS */
-  .content{flex:1;overflow-y:auto;padding:12px}
-  .card{background:var(--card);border-radius:12px;border:1px solid var(--border);padding:16px;margin-bottom:10px}
-  .card-title{font-size:11px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.8px;margin-bottom:12px}
+/* CONTENT */
+.content{flex:1;overflow-y:auto;padding:14px;padding-bottom:calc(14px + env(safe-area-inset-bottom,0))}
 
-  /* METRICS */
-  .metrics-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px}
-  .metric{background:var(--card);border-radius:12px;border:1px solid var(--border);padding:14px}
-  .metric-label{font-size:11px;color:var(--text2);margin-bottom:6px}
-  .metric-value{font-size:28px;font-weight:700;line-height:1;color:var(--text)}
-  .metric-value.pos{color:var(--green)}
-  .metric-value.neg{color:var(--red)}
-  .metric-value.accent{color:var(--red)}
-  .progress-bar{height:3px;background:#eee;border-radius:2px;margin-top:8px;overflow:hidden}
-  .progress-fill{height:100%;border-radius:2px;transition:width .5s}
+/* CARDS */
+.card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:16px;margin-bottom:12px}
+.card-title{font-size:10px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:1px;margin-bottom:14px}
 
-  /* FORM */
-  .field{margin-bottom:14px}
-  .field label{display:block;font-size:13px;font-weight:500;color:var(--text2);margin-bottom:6px}
-  .field input{width:100%;height:44px;padding:0 12px;border:1px solid var(--border);border-radius:8px;font-size:15px;color:var(--text);background:var(--card);outline:none;-webkit-appearance:none}
-  .field input:focus{border-color:var(--red);box-shadow:0 0 0 3px rgba(227,0,24,.1)}
-  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+/* METRICS */
+.metrics-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}
+.metric{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:14px 16px}
+.metric-label{font-size:11px;color:var(--text2);margin-bottom:6px;letter-spacing:.3px}
+.metric-value{font-size:28px;font-weight:800;line-height:1;letter-spacing:-1px}
+.metric-value.pos{color:var(--green)}
+.metric-value.neg{color:var(--red)}
+.metric-value.neutral{color:var(--text)}
+.metric-value.accent{color:var(--amber)}
+.prog{height:3px;background:var(--border);border-radius:2px;margin-top:10px;overflow:hidden}
+.prog-fill{height:100%;border-radius:2px;transition:width .6s cubic-bezier(.4,0,.2,1)}
 
-  /* TAGS */
-  .tag-row{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px}
-  .tag{font-size:12px;padding:7px 14px;border-radius:20px;border:1px solid var(--border);cursor:pointer;color:var(--text2);background:var(--card);font-weight:500;transition:all .15s}
-  .tag.active{background:var(--red);color:#fff;border-color:var(--red)}
+/* FORM */
+.field{margin-bottom:14px}
+.field label{display:block;font-size:12px;font-weight:600;color:var(--text2);margin-bottom:6px;letter-spacing:.3px;text-transform:uppercase}
+.field input,.field select{width:100%;height:46px;padding:0 14px;background:var(--surface2);border:1px solid var(--border);border-radius:10px;font-size:15px;color:var(--text);outline:none;-webkit-appearance:none;appearance:none}
+.field input:focus,.field select:focus{border-color:var(--cyan);box-shadow:0 0 0 3px var(--cyan-dim)}
+.field select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%238899aa' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center;padding-right:36px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 
-  /* INFO BAR */
-  .info-bar{font-size:13px;padding:10px 12px;border-radius:8px;margin-bottom:12px;line-height:1.4}
-  .info-bar.neutral{background:#f0f0f0;color:var(--text2)}
-  .info-bar.good{background:var(--green-light);color:#0e5a29;border-left:3px solid var(--green)}
-  .info-bar.warn{background:var(--red-light);color:#8a0010;border-left:3px solid var(--red)}
+/* TAGS */
+.tag-row{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px}
+.tag{font-size:12px;padding:7px 14px;border-radius:20px;border:1px solid var(--border2);cursor:pointer;color:var(--text2);background:var(--surface2);font-weight:600;transition:all .15s;letter-spacing:.2px}
+.tag.active{background:var(--cyan-dim);color:var(--cyan);border-color:var(--cyan-mid)}
+.tag.active-amber{background:var(--amber-dim);color:var(--amber);border-color:var(--amber)}
 
-  /* BUTTONS */
-  .btn{width:100%;height:48px;border:none;border-radius:10px;font-size:15px;font-weight:600;cursor:pointer;transition:all .15s}
-  .btn:active{transform:scale(.98)}
-  .btn-primary{background:var(--red);color:#fff}
-  .btn-primary:active{background:var(--red-dark)}
-  .btn-ghost{background:transparent;border:1px solid var(--border);color:var(--text2);margin-top:8px}
+/* INFO BARS */
+.info{font-size:13px;padding:10px 14px;border-radius:10px;margin-bottom:12px;line-height:1.5;border-left:3px solid}
+.info.neutral{background:var(--surface2);color:var(--text2);border-color:var(--border2)}
+.info.good{background:var(--green-dim);color:#34d399;border-color:var(--green)}
+.info.warn{background:var(--amber-dim);color:var(--amber);border-color:var(--amber)}
+.info.danger{background:var(--red-dim);color:#fb7185;border-color:var(--red)}
 
-  /* LOG LIST */
-  .log-item{display:flex;align-items:center;gap:10px;padding:12px 0;border-bottom:1px solid #f0f0f0}
-  .log-item:last-child{border-bottom:none}
-  .log-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
-  .log-dot.pos{background:var(--green)}
-  .log-dot.neg{background:var(--red)}
-  .log-dot.spec{background:#f59e0b}
-  .log-info{flex:1;min-width:0}
-  .log-date{font-size:14px;font-weight:600;color:var(--text)}
-  .log-sub{font-size:12px;color:var(--text2);margin-top:1px}
-  .badge100{display:inline-block;font-size:9px;padding:1px 5px;border-radius:4px;font-weight:800;margin-left:4px;background:#f59e0b;color:#fff;vertical-align:middle}
-  .log-extra{font-size:15px;font-weight:700;flex-shrink:0}
-  .log-extra.pos{color:var(--green)}
-  .log-extra.neg{color:var(--red)}
-  .log-del{background:none;border:none;cursor:pointer;color:var(--text3);font-size:16px;padding:4px;flex-shrink:0}
+/* BUTTONS */
+.btn{width:100%;height:50px;border:none;border-radius:12px;font-size:15px;font-weight:700;cursor:pointer;transition:all .15s;letter-spacing:.3px}
+.btn:active{transform:scale(.97)}
+.btn-primary{background:var(--cyan);color:#0a0e1a}
+.btn-primary:active{background:#00b8dd}
+.btn-ghost{background:transparent;border:1px solid var(--border2);color:var(--text2);margin-top:8px;font-size:14px}
+.btn-sm{height:36px;font-size:13px;border-radius:8px;width:auto;padding:0 14px}
 
-  /* SETUP */
-  .setup-logo{text-align:center;padding:32px 0 24px}
-  .setup-logo-sew{font-size:40px;font-weight:900;color:var(--red);letter-spacing:-1px}
-  .setup-logo-sub{font-size:11px;font-weight:700;color:var(--text2);letter-spacing:3px;text-transform:uppercase;margin-top:2px}
-  .setup-desc{font-size:14px;color:var(--text2);text-align:center;margin-bottom:24px;line-height:1.5}
-  .jornada-info{background:#f8f8f8;border-radius:10px;padding:12px 16px;margin-bottom:16px}
-  .jornada-info p{font-size:13px;color:var(--text2);line-height:2}
-  .jornada-info strong{color:var(--text);font-weight:600}
+/* LOG */
+.log-item{display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid var(--border)}
+.log-item:last-child{border-bottom:none}
+.log-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.log-dot.pos{background:var(--green)}
+.log-dot.neg{background:var(--red)}
+.log-dot.amber{background:var(--amber)}
+.log-info{flex:1;min-width:0}
+.log-date{font-size:14px;font-weight:700;color:var(--text)}
+.log-sub{font-size:12px;color:var(--text2);margin-top:2px}
+.badge-100{display:inline-block;font-size:9px;padding:2px 6px;border-radius:4px;font-weight:800;margin-left:6px;background:var(--amber-dim);color:var(--amber);border:1px solid var(--amber);vertical-align:middle}
+.log-extra{font-size:15px;font-weight:800;flex-shrink:0;letter-spacing:-.5px}
+.log-extra.pos{color:var(--green)}
+.log-extra.neg{color:var(--red)}
+.log-del{background:none;border:none;cursor:pointer;color:var(--text3);font-size:16px;padding:4px 6px;border-radius:6px;transition:all .15s}
+.log-del:hover{color:var(--red);background:var(--red-dim)}
+.empty{text-align:center;padding:3rem 0;color:var(--text3);font-size:14px}
 
-  /* EMPTY */
-  .empty{text-align:center;padding:32px 0;color:var(--text3);font-size:14px}
+/* SETUP */
+.setup-hero{text-align:center;padding:2.5rem 1rem 2rem}
+.setup-logo{display:inline-flex;align-items:center;gap:12px;margin-bottom:16px}
+.setup-title{font-size:15px;color:var(--text2);line-height:1.5}
 
-  /* SAFE AREA BOTTOM */
-  .safe-bottom{height:env(safe-area-inset-bottom, 0)}
+/* SCHEDULE TABLE */
+.sched-table{width:100%;border-collapse:collapse}
+.sched-table th{font-size:10px;color:var(--text3);font-weight:700;text-transform:uppercase;letter-spacing:.8px;padding:0 0 10px;text-align:left}
+.sched-table th:not(:first-child){text-align:center}
+.sched-row{border-top:1px solid var(--border)}
+.sched-row td{padding:8px 0}
+.day-label{font-size:13px;font-weight:700;color:var(--text2);width:38px}
+.day-toggle{display:flex;align-items:center;justify-content:center}
+.toggle{position:relative;width:36px;height:20px;cursor:pointer}
+.toggle input{opacity:0;width:0;height:0;position:absolute}
+.toggle-track{position:absolute;inset:0;background:var(--border2);border-radius:10px;transition:background .2s}
+.toggle input:checked~.toggle-track{background:var(--cyan)}
+.toggle-thumb{position:absolute;top:2px;left:2px;width:16px;height:16px;background:#fff;border-radius:50%;transition:transform .2s}
+.toggle input:checked~.toggle-thumb{transform:translateX(16px)}
+.time-input{height:36px;padding:0 8px;font-size:13px;width:76px;text-align:center;background:var(--surface2);border:1px solid var(--border);border-radius:8px;color:var(--text);outline:none}
+.time-input:focus{border-color:var(--cyan)}
+.time-input:disabled{opacity:.3;cursor:not-allowed}
+.td-center{text-align:center}
+
+/* SAFE AREA */
+.safe{height:env(safe-area-inset-bottom,0)}
 </style>
 </head>
 <body>
 <div id="app">
 
-  <!-- ===== SETUP SCREEN ===== -->
-  <div id="screen-setup" class="screen active">
-    <div class="content" style="justify-content:center">
+<!-- SETUP -->
+<div id="screen-setup" class="screen active">
+  <div class="content">
+    <div class="setup-hero">
       <div class="setup-logo">
-        <div class="setup-logo-sew">SEW</div>
-        <div class="setup-logo-sub">Eurodrive</div>
+        <svg width="48" height="48" viewBox="0 0 52 52" fill="none">
+          <rect width="52" height="52" rx="12" fill="#111827"/>
+          <line x1="10" y1="14" x2="42" y2="14" stroke="#00d4ff" stroke-width="3.5" stroke-linecap="round"/>
+          <line x1="26" y1="14" x2="26" y2="34" stroke="#00d4ff" stroke-width="3.5" stroke-linecap="round"/>
+          <path d="M8 42 Q13 37 18 41 Q23 45 28 40 Q33 35 38 39 Q41 41 44 39" stroke="#7c3aed" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+        </svg>
+        <div class="brand"><span class="brand-name">tsunami</span><span class="brand-sub">horas</span></div>
       </div>
-      <p class="setup-desc">Bem-vindo ao controle de<br>banco de horas</p>
-      <div class="card">
-        <div class="card-title">Configuração inicial</div>
-        <div class="field">
-          <label>Saldo atual de horas</label>
-          <input type="number" id="setup-balance" placeholder="Ex: 12.5 ou -3.0" step="0.5" inputmode="decimal">
-        </div>
-        <div class="info-bar neutral" style="margin-bottom:16px;font-size:12px">
-          Use valor negativo se você estiver devendo horas. Exemplo: <strong>-5.5</strong>
-        </div>
-        <div class="jornada-info">
-          <p><strong>Seg a Qui</strong> — 07:00 às 17:00 (9h/dia)</p>
-          <p><strong>Sexta</strong> — 07:00 às 16:00 (8h/dia)</p>
-        </div>
-        <button class="btn btn-primary" onclick="saveSetup()">Começar</button>
-      </div>
+      <p class="setup-title">Configure sua jornada de trabalho<br>para começar a usar</p>
     </div>
-    <div class="safe-bottom"></div>
-  </div>
 
-  <!-- ===== MAIN SCREEN ===== -->
-  <div id="screen-main" class="screen">
-    <div class="header">
-      <div class="header-inner">
-        <div class="logo">
-          <div class="logo-sew">SEW</div>
-          <div class="logo-sub">EURODRIVE</div>
-        </div>
-        <div class="divider-v"></div>
-        <span class="header-label">Banco de Horas</span>
+    <div class="card">
+      <div class="card-title">Saldo inicial de horas</div>
+      <div class="field">
+        <label>Saldo atual (use - para negativo)</label>
+        <input type="number" id="setup-balance" placeholder="Ex: 12.5 ou -3.0" step="0.5" inputmode="decimal">
+      </div>
+      <div class="info neutral" style="font-size:12px">Se você já tem horas acumuladas ou está devendo, informe aqui. Caso contrário deixe em branco.</div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Minha jornada semanal</div>
+      <div class="info neutral" style="font-size:12px;margin-bottom:14px">Ative os dias que você trabalha e defina o horário de cada um.</div>
+      <table class="sched-table">
+        <thead>
+          <tr>
+            <th>Dia</th>
+            <th>Ativo</th>
+            <th>Entrada</th>
+            <th>Saída</th>
+          </tr>
+        </thead>
+        <tbody id="sched-body"></tbody>
+      </table>
+    </div>
+
+    <button class="btn btn-primary" onclick="saveSetup()">Começar a usar</button>
+    <div class="safe"></div>
+  </div>
+</div>
+
+<!-- MAIN -->
+<div id="screen-main" class="screen">
+  <div class="header">
+    <div class="header-inner">
+      <div class="logo-mark">
+        <svg width="36" height="36" viewBox="0 0 52 52" fill="none">
+          <rect width="52" height="52" rx="12" fill="#111827"/>
+          <line x1="10" y1="14" x2="42" y2="14" stroke="#00d4ff" stroke-width="3.5" stroke-linecap="round"/>
+          <line x1="26" y1="14" x2="26" y2="34" stroke="#00d4ff" stroke-width="3.5" stroke-linecap="round"/>
+          <path d="M8 42 Q13 37 18 41 Q23 45 28 40 Q33 35 38 39 Q41 41 44 39" stroke="#7c3aed" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+        </svg>
+      </div>
+      <div class="brand"><span class="brand-name">tsunami horas</span><span class="brand-sub">apps</span></div>
+      <div class="header-right">
         <span class="header-date" id="header-date"></span>
       </div>
-      <div class="tabs">
-        <div class="tab active" onclick="showTab('resumo')">Resumo</div>
-        <div class="tab" onclick="showTab('lancar')">Lançar</div>
-        <div class="tab" onclick="showTab('historico')">Histórico</div>
-      </div>
     </div>
-
-    <!-- TAB: RESUMO -->
-    <div id="tab-resumo" class="content">
-      <div class="metrics-grid">
-        <div class="metric">
-          <div class="metric-label">Saldo atual</div>
-          <div class="metric-value" id="bal-val">0h00</div>
-          <div class="progress-bar"><div class="progress-fill" id="bal-bar" style="width:0%"></div></div>
-        </div>
-        <div class="metric">
-          <div class="metric-label">Extras 100%</div>
-          <div class="metric-value accent" id="extra100-val">0h00</div>
-        </div>
-      </div>
-      <div class="metrics-grid">
-        <div class="metric">
-          <div class="metric-label">Dias lançados</div>
-          <div class="metric-value" id="days-val" style="font-size:32px">0</div>
-        </div>
-        <div class="metric">
-          <div class="metric-label">Total trabalhado</div>
-          <div class="metric-value" id="total-val" style="font-size:22px">0h00</div>
-        </div>
-      </div>
-      <div class="card">
-        <div class="card-title">Últimos lançamentos</div>
-        <div id="recent-list"><div class="empty">Nenhum lançamento ainda</div></div>
-      </div>
-      <button class="btn btn-ghost" onclick="showSetup()">Ajustar saldo inicial</button>
-      <div class="safe-bottom"></div>
-    </div>
-
-    <!-- TAB: LANÇAR -->
-    <div id="tab-lancar" class="content" style="display:none">
-      <div class="card">
-        <div class="card-title">Novo lançamento</div>
-        <div class="field">
-          <label>Data</label>
-          <input type="date" id="entry-date">
-        </div>
-        <div id="day-info" class="info-bar warn" style="display:none"></div>
-        <div class="field">
-          <label>Tipo</label>
-          <div class="tag-row">
-            <span class="tag active" data-type="normal" onclick="setType('normal')">Normal</span>
-            <span class="tag" data-type="half" onclick="setType('half')">Antecipado</span>
-            <span class="tag" data-type="extra" onclick="setType('extra')">Hora extra</span>
-            <span class="tag" data-type="full100" onclick="setType('full100')">100% (fer/dom)</span>
-          </div>
-        </div>
-        <div class="grid2">
-          <div class="field">
-            <label>Entrada</label>
-            <input type="time" id="entrada" value="07:00">
-          </div>
-          <div class="field">
-            <label>Saída</label>
-            <input type="time" id="saida" value="17:00">
-          </div>
-        </div>
-        <div id="preview" class="info-bar" style="display:none"></div>
-        <button class="btn btn-primary" onclick="addEntry()">Lançar dia</button>
-      </div>
-      <div class="safe-bottom"></div>
-    </div>
-
-    <!-- TAB: HISTÓRICO -->
-    <div id="tab-historico" class="content" style="display:none">
-      <div class="card">
-        <div class="card-title">Todos os lançamentos</div>
-        <div id="full-list"><div class="empty">Nenhum lançamento ainda</div></div>
-      </div>
-      <div class="safe-bottom"></div>
+    <div class="tabs">
+      <div class="tab active" onclick="showTab('resumo')">Resumo</div>
+      <div class="tab" onclick="showTab('lancar')">Lançar</div>
+      <div class="tab" onclick="showTab('historico')">Histórico</div>
+      <div class="tab" onclick="showTab('config')">Config</div>
     </div>
   </div>
+
+  <!-- TAB RESUMO -->
+  <div id="tab-resumo" class="content">
+    <div class="metrics-grid">
+      <div class="metric">
+        <div class="metric-label">Saldo atual</div>
+        <div class="metric-value" id="bal-val">0h00</div>
+        <div class="prog"><div class="prog-fill" id="bal-bar" style="width:0%"></div></div>
+      </div>
+      <div class="metric">
+        <div class="metric-label">Extras 100%</div>
+        <div class="metric-value accent" id="extra100-val">0h00</div>
+      </div>
+    </div>
+    <div class="metrics-grid">
+      <div class="metric">
+        <div class="metric-label">Dias lançados</div>
+        <div class="metric-value neutral" id="days-val" style="font-size:32px">0</div>
+      </div>
+      <div class="metric">
+        <div class="metric-label">Total trabalhado</div>
+        <div class="metric-value neutral" id="total-val" style="font-size:22px">0h00</div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">Últimos lançamentos</div>
+      <div id="recent-list"><div class="empty">Nenhum lançamento ainda</div></div>
+    </div>
+    <div class="safe"></div>
+  </div>
+
+  <!-- TAB LANÇAR -->
+  <div id="tab-lancar" class="content" style="display:none">
+    <div class="card">
+      <div class="card-title">Novo lançamento</div>
+      <div class="field">
+        <label>Data</label>
+        <input type="date" id="entry-date">
+      </div>
+      <div id="day-info" style="display:none"></div>
+      <div class="field">
+        <label>Tipo</label>
+        <div class="tag-row">
+          <span class="tag active" data-type="normal" onclick="setType('normal')">Normal</span>
+          <span class="tag" data-type="half" onclick="setType('half')">Antecipado</span>
+          <span class="tag" data-type="extra" onclick="setType('extra')">Hora extra</span>
+          <span class="tag" data-type="full100" onclick="setType('full100')">100% fer/dom</span>
+        </div>
+      </div>
+      <div class="grid2">
+        <div class="field">
+          <label>Entrada</label>
+          <input type="time" id="entrada">
+        </div>
+        <div class="field">
+          <label>Saída</label>
+          <input type="time" id="saida">
+        </div>
+      </div>
+      <div id="preview" style="display:none"></div>
+      <button class="btn btn-primary" onclick="addEntry()">Lançar dia</button>
+    </div>
+    <div class="safe"></div>
+  </div>
+
+  <!-- TAB HISTÓRICO -->
+  <div id="tab-historico" class="content" style="display:none">
+    <div class="card">
+      <div class="card-title">Todos os lançamentos</div>
+      <div id="full-list"><div class="empty">Nenhum lançamento ainda</div></div>
+    </div>
+    <div class="safe"></div>
+  </div>
+
+  <!-- TAB CONFIG -->
+  <div id="tab-config" class="content" style="display:none">
+    <div class="card">
+      <div class="card-title">Saldo inicial</div>
+      <div class="field">
+        <label>Saldo de horas (positivo ou negativo)</label>
+        <input type="number" id="cfg-balance" step="0.5" inputmode="decimal">
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">Jornada semanal</div>
+      <table class="sched-table">
+        <thead>
+          <tr>
+            <th>Dia</th>
+            <th>Ativo</th>
+            <th>Entrada</th>
+            <th>Saída</th>
+          </tr>
+        </thead>
+        <tbody id="cfg-sched-body"></tbody>
+      </table>
+    </div>
+    <button class="btn btn-primary" onclick="saveConfig()">Salvar configuração</button>
+    <button class="btn btn-ghost" onclick="confirmReset()">Apagar todos os lançamentos</button>
+    <div class="safe"></div>
+  </div>
+</div>
 
 </div>
 
 <script>
+const DAYS=['Dom','Seg','Ter','Qua','Qui','Sex','Sáb'];
+const MONTHS=['jan','fev','mar','abr','mai','jun','jul','ago','set','out','nov','dez'];
 const HOLIDAYS=['2025-01-01','2025-02-03','2025-02-04','2025-04-18','2025-04-19','2025-04-21','2025-05-01','2025-06-19','2025-09-07','2025-10-12','2025-11-02','2025-11-15','2025-11-20','2025-12-08','2025-12-25','2026-01-01','2026-02-16','2026-02-17','2026-04-03','2026-04-04','2026-04-21','2026-05-01','2026-06-04','2026-09-07','2026-10-12','2026-11-02','2026-11-15','2026-11-20','2026-12-08','2026-12-25'];
 const HNAMES={'01-01':'Confraternização Universal','02-03':'Carnaval','02-04':'Carnaval','02-16':'Carnaval','02-17':'Carnaval','04-03':'Paixão de Cristo','04-04':'Paixão de Cristo','04-18':'Paixão de Cristo','04-19':'Paixão de Cristo','04-21':'Tiradentes','05-01':'Dia do Trabalhador','06-04':'Corpus Christi','06-19':'Corpus Christi','09-07':'Independência','10-12':'N. Sra. Aparecida','11-02':'Finados','11-15':'Proclamação da República','11-20':'Consciência Negra','12-08':'Imaculada Conceição','12-25':'Natal'};
-const WEEK=['Dom','Seg','Ter','Qua','Qui','Sex','Sáb'];
-const MTHS=['jan','fev','mar','abr','mai','jun','jul','ago','set','out','nov','dez'];
 
-let S={balance:0,entries:[],extra100:0,totalWorked:0};
+const DEFAULT_SCHED=[
+  {active:false,in:'',out:''},
+  {active:true,in:'08:00',out:'17:00'},
+  {active:true,in:'08:00',out:'17:00'},
+  {active:true,in:'08:00',out:'17:00'},
+  {active:true,in:'08:00',out:'17:00'},
+  {active:true,in:'08:00',out:'17:00'},
+  {active:false,in:'',out:''}
+];
+
+let S={balance:0,entries:[],extra100:0,totalWorked:0,sched:JSON.parse(JSON.stringify(DEFAULT_SCHED))};
 let selType='normal';
 
-function save(){localStorage.setItem('sew_state',JSON.stringify(S))}
-function load(){try{const d=localStorage.getItem('sew_state');if(d){S=JSON.parse(d);return true}}catch(e){}return false}
-function toMin(t){const[h,m]=t.split(':').map(Number);return h*60+m}
+function save(){try{localStorage.setItem('tsn_state',JSON.stringify(S))}catch(e){}}
+function load(){try{const d=localStorage.getItem('tsn_state');if(d){S=JSON.parse(d);if(!S.sched)S.sched=JSON.parse(JSON.stringify(DEFAULT_SCHED));return true}}catch(e){}return false}
+function toMin(t){if(!t)return 0;const[h,m]=t.split(':').map(Number);return h*60+m}
 function fmtH(min){const neg=min<0;const a=Math.abs(Math.round(min));return(neg?'-':'')+Math.floor(a/60)+'h'+String(a%60).padStart(2,'0')}
 function isHol(d){return HOLIDAYS.includes(d)}
 function isSun(d){return new Date(d+'T12:00:00').getDay()===0}
 function isSpec(d){return isHol(d)||isSun(d)}
 function getHolName(d){return HNAMES[d.slice(5)]||'Feriado'}
 function getDow(d){return new Date(d+'T12:00:00').getDay()}
-function getDailyMin(d){return getDow(d)===5?480:540}
-function getDefOut(d){return getDow(d)===5?'16:00':'17:00'}
-function getDayLabel(d){const dt=new Date(d+'T12:00:00');return WEEK[dt.getDay()]+' '+dt.getDate()+' '+MTHS[dt.getMonth()]}
+function getDayLabel(d){const dt=new Date(d+'T12:00:00');return DAYS[dt.getDay()]+' '+dt.getDate()+' '+MONTHS[dt.getMonth()]}
+
+function getSchedForDay(d){
+  const dow=getDow(d);
+  return S.sched[dow];
+}
+
+function buildSchedTable(tbodyId,schedData){
+  const tbody=document.getElementById(tbodyId);
+  if(!tbody)return;
+  tbody.innerHTML='';
+  for(let i=1;i<=6;i++){
+    const day=schedData[i];
+    const tr=document.createElement('tr');
+    tr.className='sched-row';
+    tr.innerHTML=`
+      <td><span class="day-label">${DAYS[i]}</span></td>
+      <td class="td-center">
+        <label class="toggle">
+          <input type="checkbox" data-dow="${i}" ${day.active?'checked':''} onchange="toggleDay(${i},'${tbodyId}')">
+          <div class="toggle-track"></div>
+          <div class="toggle-thumb"></div>
+        </label>
+      </td>
+      <td class="td-center">
+        <input class="time-input" type="time" data-dow="${i}" data-field="in" value="${day.in}" ${!day.active?'disabled':''} onchange="updateSchedTime(${i},'in',this.value,'${tbodyId}')">
+      </td>
+      <td class="td-center">
+        <input class="time-input" type="time" data-dow="${i}" data-field="out" value="${day.out}" ${!day.active?'disabled':''} onchange="updateSchedTime(${i},'out',this.value,'${tbodyId}')">
+      </td>`;
+    tbody.appendChild(tr);
+  }
+}
+
+function toggleDay(dow,tbodyId){
+  const cb=document.querySelector(`#${tbodyId} input[data-dow="${dow}"]`);
+  S.sched[dow].active=cb.checked;
+  const inputs=document.querySelectorAll(`#${tbodyId} input[data-dow="${dow}"][data-field]`);
+  inputs.forEach(inp=>inp.disabled=!cb.checked);
+  if(!tbodyId.includes('cfg'))save();
+}
+
+function updateSchedTime(dow,field,val,tbodyId){
+  S.sched[dow][field]=val;
+  if(!tbodyId.includes('cfg'))save();
+}
 
 function saveSetup(){
-  const v=parseFloat(document.getElementById('setup-balance').value)||0;
-  S={balance:Math.round(v*60),entries:[],extra100:0,totalWorked:0};
+  const ib=parseFloat(document.getElementById('setup-balance').value)||0;
+  S.balance=Math.round(ib*60);
+  S.entries=[];S.extra100=0;S.totalWorked=0;
+  const rows=document.querySelectorAll('#sched-body .sched-row');
+  rows.forEach((_,i)=>{
+    const dow=i+1;
+    const cb=document.querySelector(`#sched-body input[data-dow="${dow}"]`);
+    const inEl=document.querySelector(`#sched-body input[data-dow="${dow}"][data-field="in"]`);
+    const outEl=document.querySelector(`#sched-body input[data-dow="${dow}"][data-field="out"]`);
+    S.sched[dow].active=cb.checked;
+    S.sched[dow].in=inEl.value;
+    S.sched[dow].out=outEl.value;
+  });
   save();
   document.getElementById('screen-setup').classList.remove('active');
   document.getElementById('screen-main').classList.add('active');
@@ -270,102 +422,178 @@ function saveSetup(){
   document.getElementById('entry-date').value=today;
   updateDateInfo();updateUI();
 }
-function showSetup(){
-  document.getElementById('setup-balance').value=(S.balance/60).toFixed(1);
-  document.getElementById('screen-main').classList.remove('active');
-  document.getElementById('screen-setup').classList.add('active');
+
+function saveConfig(){
+  const b=parseFloat(document.getElementById('cfg-balance').value)||0;
+  S.balance=Math.round(b*60);
+  const rows=document.querySelectorAll('#cfg-sched-body .sched-row');
+  rows.forEach((_,i)=>{
+    const dow=i+1;
+    const cb=document.querySelector(`#cfg-sched-body input[data-dow="${dow}"]`);
+    const inEl=document.querySelector(`#cfg-sched-body input[data-dow="${dow}"][data-field="in"]`);
+    const outEl=document.querySelector(`#cfg-sched-body input[data-dow="${dow}"][data-field="out"]`);
+    if(cb)S.sched[dow].active=cb.checked;
+    if(inEl)S.sched[dow].in=inEl.value;
+    if(outEl)S.sched[dow].out=outEl.value;
+  });
+  save();updateUI();
+  showAlert('Configuração salva!');
 }
+
+function confirmReset(){
+  if(confirm('Apagar todos os lançamentos? O saldo e a jornada serão mantidos.')){
+    S.entries=[];S.extra100=0;S.totalWorked=0;save();updateUI();
+  }
+}
+
+function showAlert(msg){
+  const el=document.createElement('div');
+  el.style.cssText='position:fixed;top:env(safe-area-inset-top,20px);left:50%;transform:translateX(-50%);background:#10b981;color:#fff;padding:10px 20px;border-radius:10px;font-size:14px;font-weight:700;z-index:999;pointer-events:none';
+  el.textContent=msg;
+  document.body.appendChild(el);
+  setTimeout(()=>el.remove(),2000);
+}
+
 function showTab(t){
-  ['resumo','lancar','historico'].forEach(id=>{
-    document.getElementById('tab-'+id).style.display=id===t?'':'none';
+  ['resumo','lancar','historico','config'].forEach(id=>{
+    document.getElementById('tab-'+id).style.display=id===t?'block':'none';
   });
   document.querySelectorAll('.tab').forEach((el,i)=>{
-    el.classList.toggle('active',['resumo','lancar','historico'][i]===t);
+    el.classList.toggle('active',['resumo','lancar','historico','config'][i]===t);
   });
+  if(t==='config'){
+    document.getElementById('cfg-balance').value=(S.balance/60).toFixed(1);
+    buildSchedTable('cfg-sched-body',S.sched);
+  }
 }
+
 function setType(t){
   selType=t;
-  document.querySelectorAll('.tag').forEach(el=>el.classList.toggle('active',el.dataset.type===t));
+  document.querySelectorAll('.tag').forEach(el=>{
+    el.classList.remove('active','active-amber');
+    if(el.dataset.type===t){
+      el.classList.add(t==='full100'?'active-amber':'active');
+    }
+  });
   updatePreview();
 }
+
 function updateDateInfo(){
   const d=document.getElementById('entry-date').value;
   if(!d)return;
-  document.getElementById('saida').value=getDefOut(d);
+  const sched=getSchedForDay(d);
   const bar=document.getElementById('day-info');
+
+  if(sched&&sched.active){
+    document.getElementById('entrada').value=sched.in||'';
+    document.getElementById('saida').value=sched.out||'';
+  }
+
   const dow=getDow(d);
-  if(dow===6){bar.style.display='block';bar.textContent='Sábado — normalmente não é dia de trabalho.';if(selType==='full100')setType('normal');}
-  else if(isHol(d)){bar.style.display='block';bar.textContent='Feriado: '+getHolName(d)+' — conta 100%.';if(selType==='normal')setType('full100');}
-  else if(isSun(d)){bar.style.display='block';bar.textContent='Domingo — conta 100%.';if(selType==='normal')setType('full100');}
-  else{bar.style.display='none';if(selType==='full100')setType('normal');}
+  if(isHol(d)){
+    bar.style.display='block';
+    bar.className='info warn';
+    bar.textContent='Feriado: '+getHolName(d)+' — marque como 100% se trabalhou';
+    if(selType==='normal')setType('full100');
+  } else if(isSun(d)||dow===0){
+    bar.style.display='block';
+    bar.className='info warn';
+    bar.textContent='Domingo — marque como 100% se trabalhou';
+    if(selType==='normal')setType('full100');
+  } else if(!sched||!sched.active){
+    bar.style.display='block';
+    bar.className='info neutral';
+    bar.textContent='Este dia não está na sua jornada. Você pode lançar mesmo assim.';
+    if(selType==='full100')setType('extra');
+  } else {
+    bar.style.display='none';
+    if(selType==='full100')setType('normal');
+  }
   updatePreview();
 }
+
 function calcResult(){
   const d=document.getElementById('entry-date').value;
   const ent=document.getElementById('entrada').value;
   const sai=document.getElementById('saida').value;
   if(!d||!ent||!sai)return null;
   const worked=toMin(sai)-toMin(ent)-60;
-  const daily=getDailyMin(d);
+  const sched=getSchedForDay(d);
+  const daily=sched&&sched.active?toMin(sched.out)-toMin(sched.in)-60:0;
   const spec=isSpec(d)||selType==='full100';
-  if(spec)return{extra:worked*2,raw:worked,spec:true};
-  return{extra:worked-daily,raw:worked,spec:false};
+  if(spec)return{extra:worked,raw:worked,spec:true,daily};
+  return{extra:worked-daily,raw:worked,spec:false,daily};
 }
+
 function updatePreview(){
   const bar=document.getElementById('preview');
   const r=calcResult();
   if(!r){bar.style.display='none';return;}
   bar.style.display='block';
-  if(r.spec){bar.className='info-bar warn';bar.textContent='Trabalhado: '+fmtH(r.raw)+' × 2 = '+fmtH(r.extra)+' creditados (100%)';}
-  else if(r.extra>0){bar.className='info-bar good';bar.textContent='Horas extras: +'+fmtH(r.extra)+' no saldo';}
-  else if(r.extra<0){bar.className='info-bar warn';bar.textContent='Saída antecipada: '+fmtH(r.extra)+' no saldo';}
-  else{bar.className='info-bar neutral';bar.textContent='Jornada completa — saldo inalterado';}
+  if(r.spec){
+    bar.className='info warn';
+    bar.textContent='Trabalhado: '+fmtH(r.raw)+' — registrado como 100% extra';
+  } else if(r.extra>0){
+    bar.className='info good';
+    bar.textContent='Horas extras: +'+fmtH(r.extra)+' no saldo';
+  } else if(r.extra<0){
+    bar.className='info danger';
+    bar.textContent='Saída antecipada: '+fmtH(r.extra)+' no saldo';
+  } else {
+    bar.className='info neutral';
+    bar.textContent='Jornada completa — saldo inalterado';
+  }
 }
+
 function addEntry(){
   const d=document.getElementById('entry-date').value;
-  if(!d){alert('Selecione a data');return;}
+  if(!d){showAlert('Selecione a data');return;}
   const ent=document.getElementById('entrada').value;
   const sai=document.getElementById('saida').value;
-  if(!ent||!sai){alert('Preencha entrada e saída');return;}
+  if(!ent||!sai){showAlert('Preencha entrada e saída');return;}
   const r=calcResult();if(!r)return;
-  S.entries.unshift({date:d,entrada:ent,saida:sai,extra:r.extra,raw:r.raw,spec:r.spec,id:Date.now()});
+  S.entries.unshift({date:d,entrada:ent,saida:sai,extra:r.extra,raw:r.raw,spec:r.spec,type:selType,id:Date.now()});
   S.balance+=r.extra;
   S.totalWorked+=r.raw;
-  if(r.spec)S.extra100+=r.extra;
+  if(r.spec)S.extra100+=r.raw;
   save();updateUI();
+  setType('normal');
   showTab('resumo');
+  showAlert('Lançamento salvo!');
 }
+
 function deleteEntry(id){
   const idx=S.entries.findIndex(e=>e.id===id);if(idx<0)return;
   const e=S.entries[idx];
   S.balance-=e.extra;S.totalWorked-=e.raw;
-  if(e.spec)S.extra100-=e.extra;
+  if(e.spec)S.extra100-=e.raw;
   S.entries.splice(idx,1);save();updateUI();
 }
+
 function renderLog(entries,limit){
   if(!entries.length)return'<div class="empty">Nenhum lançamento ainda</div>';
   const list=limit?entries.slice(0,limit):entries;
   return list.map(e=>{
     const pos=e.extra>=0;
-    const dotCls=e.spec?'spec':pos?'pos':'neg';
-    const badge=e.spec?'<span class="badge100">100%</span>':'';
+    const dotCls=e.spec?'amber':pos?'pos':'neg';
+    const badge=e.spec?'<span class="badge-100">100%</span>':'';
     return`<div class="log-item">
       <div class="log-dot ${dotCls}"></div>
       <div class="log-info">
         <div class="log-date">${getDayLabel(e.date)}${badge}</div>
-        <div class="log-sub">${e.entrada} – ${e.saida}</div>
+        <div class="log-sub">${e.entrada} – ${e.saida} · trabalhado ${fmtH(e.raw)}</div>
       </div>
       <div class="log-extra ${pos?'pos':'neg'}">${pos?'+':''}${fmtH(e.extra)}</div>
       <button class="log-del" onclick="deleteEntry(${e.id})">✕</button>
     </div>`;
   }).join('');
 }
+
 function updateUI(){
   const b=S.balance;
   const el=document.getElementById('bal-val');
-  el.textContent=fmtH(Math.abs(b));
+  el.textContent=(b<0?'-':'')+fmtH(Math.abs(b));
   el.className='metric-value '+(b>=0?'pos':'neg');
-  if(b<0)el.textContent='-'+fmtH(Math.abs(b));
   const pct=Math.min(100,Math.abs(b)/600*100);
   const bar=document.getElementById('bal-bar');
   bar.style.width=pct+'%';
@@ -377,15 +605,18 @@ function updateUI(){
   document.getElementById('full-list').innerHTML=renderLog(S.entries,0);
 }
 
-// Init
+// INIT
 const now=new Date();
 document.getElementById('header-date').textContent=now.toLocaleDateString('pt-BR',{weekday:'short',day:'numeric',month:'short'});
-document.getElementById('entry-date').value=now.toISOString().slice(0,10);
 
-if(load()&&S.entries!==undefined){
+if(load()){
   document.getElementById('screen-setup').classList.remove('active');
   document.getElementById('screen-main').classList.add('active');
+  const today=now.toISOString().slice(0,10);
+  document.getElementById('entry-date').value=today;
   updateDateInfo();updateUI();
+} else {
+  buildSchedTable('sched-body',S.sched);
 }
 
 document.getElementById('entry-date').addEventListener('change',updateDateInfo);

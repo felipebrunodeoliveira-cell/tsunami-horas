@@ -1,11 +1,11 @@
 {
-  "name": "SEW Banco de Horas",
-  "short_name": "SEW Horas",
-  "description": "Controle de horas extra SEW-Eurodrive",
+  "name": "Tsunami Horas",
+  "short_name": "Horas",
+  "description": "Controle de banco de horas — Tsunami Apps",
   "start_url": "./index.html",
   "display": "standalone",
-  "background_color": "#E30018",
-  "theme_color": "#E30018",
+  "background_color": "#0a0e1a",
+  "theme_color": "#0a0e1a",
   "orientation": "portrait",
   "icons": [
     { "src": "icon-192.png", "sizes": "192x192", "type": "image/png" },
