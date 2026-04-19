@@ -12,145 +12,145 @@
 <style>
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 :root{
-  --bg:#0a0e1a;--surface:#0d1220;--surface2:#111827;
-  --border:#1e2a42;--border2:#2a3a55;
-  --cyan:#00d4ff;--cyan-dim:#00d4ff22;--cyan-mid:#00d4ff55;
-  --violet:#7c3aed;--violet-dim:#7c3aed22;
-  --text:#e2e8f0;--text2:#8899aa;--text3:#4a5568;
-  --green:#10b981;--green-dim:#10b98122;
-  --red:#f43f5e;--red-dim:#f43f5e22;
-  --amber:#f59e0b;--amber-dim:#f59e0b22;
+  --bg:#0a0e1a;--surf:#0d1220;--surf2:#111827;
+  --b1:#1e2a42;--b2:#2a3a55;
+  --cyan:#00d4ff;--cdim:#00d4ff22;--cmid:#00d4ff55;
+  --vio:#7c3aed;
+  --tx:#e2e8f0;--tx2:#8899aa;--tx3:#4a5568;
+  --grn:#10b981;--gdim:#10b98122;
+  --red:#f43f5e;--rdim:#f43f5e22;
+  --amb:#f59e0b;--adim:#f59e0b22;
 }
-html,body{height:100%;background:var(--bg);font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','Segoe UI',sans-serif;color:var(--text);font-size:16px;overflow-x:hidden}
-#app{display:flex;flex-direction:column;min-height:100vh;max-width:480px;margin:0 auto}
-.screen{display:none;flex-direction:column;flex:1}
-.screen.active{display:flex}
-
-/* LOGIN */
-.login-wrap{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:2rem;gap:2rem}
-.login-logo{display:flex;flex-direction:column;align-items:center;gap:12px}
-.login-brand{font-size:32px;font-weight:800;color:var(--text);letter-spacing:-1px}
-.login-sub{font-size:10px;font-weight:700;color:var(--cyan);letter-spacing:4px;text-transform:uppercase}
-.login-desc{font-size:14px;color:var(--text2);text-align:center;line-height:1.6;max-width:280px}
-.btn-google{display:flex;align-items:center;justify-content:center;gap:12px;width:100%;max-width:300px;height:52px;background:#fff;color:#1a1a1a;border:none;border-radius:12px;font-size:15px;font-weight:600;cursor:pointer;transition:all .15s}
-.btn-google:active{transform:scale(.97);background:#f0f0f0}
-.btn-google svg{flex-shrink:0}
-.login-footer{font-size:12px;color:var(--text3);text-align:center;line-height:1.6}
-
-/* HEADER */
-.header{background:var(--surface);border-bottom:1px solid var(--border);padding:env(safe-area-inset-top,0) 0 0;flex-shrink:0}
-.header-inner{padding:12px 16px;display:flex;align-items:center;gap:10px}
-.brand{display:flex;flex-direction:column;gap:1px}
-.brand-name{font-size:16px;font-weight:800;color:var(--text);letter-spacing:-.5px;line-height:1}
-.brand-sub{font-size:8px;font-weight:700;color:var(--cyan);letter-spacing:3px;text-transform:uppercase}
-.header-right{margin-left:auto;display:flex;align-items:center;gap:8px}
-.avatar{width:30px;height:30px;border-radius:50%;border:2px solid var(--cyan-mid);object-fit:cover;cursor:pointer}
-.avatar-placeholder{width:30px;height:30px;border-radius:50%;background:var(--cyan-dim);border:2px solid var(--cyan-mid);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:var(--cyan);cursor:pointer}
-
-/* TABS */
-.tabs{display:flex;border-bottom:1px solid var(--border)}
-.tab{flex:1;padding:11px 4px;font-size:11px;font-weight:700;color:var(--text3);text-align:center;cursor:pointer;border-bottom:2px solid transparent;letter-spacing:.5px;text-transform:uppercase;transition:all .2s}
-.tab.active{color:var(--cyan);border-bottom-color:var(--cyan)}
-
-/* CONTENT */
-.content{flex:1;overflow-y:auto;padding:14px;padding-bottom:calc(14px + env(safe-area-inset-bottom,0))}
-
-/* CARDS */
-.card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:16px;margin-bottom:12px}
-.card-title{font-size:10px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:1px;margin-bottom:14px}
-
-/* METRICS */
-.metrics-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}
-.metric{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:14px 16px}
-.metric-label{font-size:11px;color:var(--text2);margin-bottom:6px;letter-spacing:.3px}
-.metric-value{font-size:28px;font-weight:800;line-height:1;letter-spacing:-1px}
-.metric-value.pos{color:var(--green)}
-.metric-value.neg{color:var(--red)}
-.metric-value.neutral{color:var(--text)}
-.metric-value.accent{color:var(--amber)}
-.prog{height:3px;background:var(--border);border-radius:2px;margin-top:10px;overflow:hidden}
-.prog-fill{height:100%;border-radius:2px;transition:width .6s}
-
-/* FORM */
-.field{margin-bottom:14px}
-.field label{display:block;font-size:12px;font-weight:600;color:var(--text2);margin-bottom:6px;letter-spacing:.3px;text-transform:uppercase}
-.field input,.field select{width:100%;height:46px;padding:0 14px;background:var(--surface2);border:1px solid var(--border);border-radius:10px;font-size:15px;color:var(--text);outline:none;-webkit-appearance:none;appearance:none}
-.field input:focus,.field select:focus{border-color:var(--cyan);box-shadow:0 0 0 3px var(--cyan-dim)}
-.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-
-/* TAGS */
-.tag-row{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px}
-.tag{font-size:12px;padding:7px 14px;border-radius:20px;border:1px solid var(--border2);cursor:pointer;color:var(--text2);background:var(--surface2);font-weight:600;transition:all .15s}
-.tag.active{background:var(--cyan-dim);color:var(--cyan);border-color:var(--cyan-mid)}
-.tag.active-amber{background:var(--amber-dim);color:var(--amber);border-color:var(--amber)}
-
-/* INFO */
-.info{font-size:13px;padding:10px 14px;border-radius:10px;margin-bottom:12px;line-height:1.5;border-left:3px solid}
-.info.neutral{background:var(--surface2);color:var(--text2);border-color:var(--border2)}
-.info.good{background:var(--green-dim);color:#34d399;border-color:var(--green)}
-.info.warn{background:var(--amber-dim);color:var(--amber);border-color:var(--amber)}
-.info.danger{background:var(--red-dim);color:#fb7185;border-color:var(--red)}
-
-/* BUTTONS */
-.btn{width:100%;height:50px;border:none;border-radius:12px;font-size:15px;font-weight:700;cursor:pointer;transition:all .15s;letter-spacing:.3px}
-.btn:active{transform:scale(.97)}
-.btn-primary{background:var(--cyan);color:#0a0e1a}
-.btn-primary:active{background:#00b8dd}
-.btn-ghost{background:transparent;border:1px solid var(--border2);color:var(--text2);margin-top:8px;font-size:14px}
-.btn-danger{background:transparent;border:1px solid var(--red);color:var(--red);margin-top:8px;font-size:14px}
-
-/* LOG */
-.log-item{display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid var(--border)}
-.log-item:last-child{border-bottom:none}
-.log-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
-.log-dot.pos{background:var(--green)}
-.log-dot.neg{background:var(--red)}
-.log-dot.amber{background:var(--amber)}
-.log-info{flex:1;min-width:0}
-.log-date{font-size:14px;font-weight:700;color:var(--text)}
-.log-sub{font-size:12px;color:var(--text2);margin-top:2px}
-.badge-100{display:inline-block;font-size:9px;padding:2px 6px;border-radius:4px;font-weight:800;margin-left:6px;background:var(--amber-dim);color:var(--amber);border:1px solid var(--amber);vertical-align:middle}
-.log-extra{font-size:15px;font-weight:800;flex-shrink:0;letter-spacing:-.5px}
-.log-extra.pos{color:var(--green)}
-.log-extra.neg{color:var(--red)}
-.log-del{background:none;border:none;cursor:pointer;color:var(--text3);font-size:16px;padding:4px 6px;border-radius:6px}
-.log-del:hover{color:var(--red);background:var(--red-dim)}
-.empty{text-align:center;padding:3rem 0;color:var(--text3);font-size:14px}
-
-/* SCHEDULE */
-.sched-table{width:100%;border-collapse:collapse}
-.sched-table th{font-size:10px;color:var(--text3);font-weight:700;text-transform:uppercase;letter-spacing:.8px;padding:0 0 10px;text-align:left}
-.sched-table th:not(:first-child){text-align:center}
-.sched-row{border-top:1px solid var(--border)}
-.sched-row td{padding:8px 0}
-.day-label{font-size:13px;font-weight:700;color:var(--text2);width:38px}
-.td-center{text-align:center}
-.toggle{position:relative;width:36px;height:20px;cursor:pointer;display:inline-block}
-.toggle input{opacity:0;width:0;height:0;position:absolute}
-.toggle-track{position:absolute;inset:0;background:var(--border2);border-radius:10px;transition:background .2s}
-.toggle input:checked~.toggle-track{background:var(--cyan)}
-.toggle-thumb{position:absolute;top:2px;left:2px;width:16px;height:16px;background:#fff;border-radius:50%;transition:transform .2s;pointer-events:none}
-.toggle input:checked~.toggle-thumb{transform:translateX(16px)}
-.time-input{height:36px;padding:0 8px;font-size:13px;width:76px;text-align:center;background:var(--surface2);border:1px solid var(--border);border-radius:8px;color:var(--text);outline:none}
-.time-input:focus{border-color:var(--cyan)}
-.time-input:disabled{opacity:.3}
+html,body{height:100%;background:var(--bg);font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','Segoe UI',sans-serif;color:var(--tx);font-size:16px;overflow-x:hidden}
+#app{display:flex;flex-direction:column;min-height:100dvh;max-width:480px;margin:0 auto}
+.scr{display:none;flex-direction:column;flex:1}
+.scr.on{display:flex}
 
 /* LOADING */
-.loading-wrap{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px}
-.spinner{width:32px;height:32px;border:3px solid var(--border);border-top-color:var(--cyan);border-radius:50%;animation:spin .8s linear infinite}
+.center-wrap{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:20px;padding:2rem}
+.spin{width:36px;height:36px;border:3px solid var(--b1);border-top-color:var(--cyan);border-radius:50%;animation:spin .8s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
-.loading-text{font-size:14px;color:var(--text2)}
+
+/* LOGIN */
+.login-logo{display:flex;flex-direction:column;align-items:center;gap:10px;margin-bottom:8px}
+.login-name{font-size:30px;font-weight:800;letter-spacing:-1px}
+.login-sub{font-size:10px;font-weight:700;color:var(--cyan);letter-spacing:4px;text-transform:uppercase}
+.login-desc{font-size:14px;color:var(--tx2);text-align:center;line-height:1.6;max-width:280px}
+.btn-g{display:flex;align-items:center;justify-content:center;gap:12px;width:100%;max-width:300px;height:54px;background:#fff;color:#1a1a1a;border:none;border-radius:14px;font-size:15px;font-weight:700;cursor:pointer;transition:opacity .15s}
+.btn-g:active{opacity:.85}
+.login-note{font-size:12px;color:var(--tx3);text-align:center;line-height:1.6}
+
+/* HEADER */
+.hdr{background:var(--surf);border-bottom:1px solid var(--b1);padding:env(safe-area-inset-top,0) 0 0;flex-shrink:0}
+.hdr-inner{padding:12px 16px;display:flex;align-items:center;gap:10px}
+.brand-name{font-size:16px;font-weight:800;letter-spacing:-.5px;line-height:1}
+.brand-sub{font-size:8px;font-weight:700;color:var(--cyan);letter-spacing:3px;text-transform:uppercase;margin-top:2px}
+.hdr-right{margin-left:auto}
+.av{width:32px;height:32px;border-radius:50%;border:2px solid var(--cmid);object-fit:cover;cursor:pointer}
+.av-ph{width:32px;height:32px;border-radius:50%;background:var(--cdim);border:2px solid var(--cmid);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:var(--cyan);cursor:pointer}
+
+/* TABS */
+.tabs{display:flex;border-bottom:1px solid var(--b1)}
+.tab{flex:1;padding:11px 2px;font-size:11px;font-weight:700;color:var(--tx3);text-align:center;cursor:pointer;border-bottom:2px solid transparent;letter-spacing:.4px;text-transform:uppercase;transition:color .15s,border-color .15s}
+.tab.on{color:var(--cyan);border-bottom-color:var(--cyan)}
+
+/* CONTENT */
+.pane{flex:1;overflow-y:auto;padding:14px;padding-bottom:calc(14px + env(safe-area-inset-bottom,0))}
+
+/* CARD */
+.card{background:var(--surf);border:1px solid var(--b1);border-radius:14px;padding:16px;margin-bottom:12px}
+.ctitle{font-size:10px;font-weight:700;color:var(--tx3);text-transform:uppercase;letter-spacing:1px;margin-bottom:14px}
+
+/* METRICS */
+.mgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}
+.met{background:var(--surf);border:1px solid var(--b1);border-radius:14px;padding:14px 16px}
+.mlbl{font-size:11px;color:var(--tx2);margin-bottom:6px}
+.mval{font-size:28px;font-weight:800;line-height:1;letter-spacing:-1px;color:var(--tx)}
+.mval.pos{color:var(--grn)}
+.mval.neg{color:var(--red)}
+.mval.amb{color:var(--amb)}
+.prog{height:3px;background:var(--b1);border-radius:2px;margin-top:10px;overflow:hidden}
+.pb{height:100%;border-radius:2px;transition:width .5s}
+
+/* FORM */
+.fld{margin-bottom:14px}
+.fld label{display:block;font-size:12px;font-weight:600;color:var(--tx2);margin-bottom:6px;letter-spacing:.3px;text-transform:uppercase}
+.fld input,.fld select{width:100%;height:48px;padding:0 14px;background:var(--surf2);border:1px solid var(--b1);border-radius:10px;font-size:15px;color:var(--tx);outline:none;-webkit-appearance:none;appearance:none}
+.fld input:focus,.fld select:focus{border-color:var(--cyan);box-shadow:0 0 0 3px var(--cdim)}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+
+/* TIME INPUTS — wider to avoid cutoff */
+.time-wrap{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px}
+.time-wrap .fld{margin-bottom:0}
+.time-wrap input[type=time]{width:100%;height:52px;padding:0 16px;background:var(--surf2);border:1px solid var(--b1);border-radius:10px;font-size:16px;color:var(--tx);outline:none;-webkit-appearance:none;appearance:none;min-width:0}
+.time-wrap input[type=time]:focus{border-color:var(--cyan);box-shadow:0 0 0 3px var(--cdim)}
+
+/* TAGS */
+.tags{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px}
+.tag{font-size:12px;padding:7px 14px;border-radius:20px;border:1px solid var(--b2);cursor:pointer;color:var(--tx2);background:var(--surf2);font-weight:600;transition:all .15s;white-space:nowrap}
+.tag.on{background:var(--cdim);color:var(--cyan);border-color:var(--cmid)}
+.tag.on-a{background:var(--adim);color:var(--amb);border-color:var(--amb)}
+
+/* INFO BARS */
+.info{font-size:13px;padding:10px 14px;border-radius:10px;margin-bottom:12px;line-height:1.5;border-left:3px solid}
+.info.n{background:var(--surf2);color:var(--tx2);border-color:var(--b2)}
+.info.g{background:var(--gdim);color:#34d399;border-color:var(--grn)}
+.info.w{background:var(--adim);color:var(--amb);border-color:var(--amb)}
+.info.d{background:var(--rdim);color:#fb7185;border-color:var(--red)}
+
+/* BUTTONS */
+.btn{width:100%;height:52px;border:none;border-radius:12px;font-size:15px;font-weight:700;cursor:pointer;transition:opacity .15s;letter-spacing:.3px}
+.btn:active{opacity:.8}
+.btn.pri{background:var(--cyan);color:#0a0e1a}
+.btn.gho{background:transparent;border:1px solid var(--b2);color:var(--tx2);margin-top:8px}
+.btn.dan{background:transparent;border:1px solid var(--red);color:var(--red);margin-top:8px}
+
+/* LOG */
+.li{display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid var(--b1)}
+.li:last-child{border-bottom:none}
+.ldot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.ldot.g{background:var(--grn)}
+.ldot.r{background:var(--red)}
+.ldot.a{background:var(--amb)}
+.linfo{flex:1;min-width:0}
+.ldate{font-size:14px;font-weight:700;color:var(--tx)}
+.lsub{font-size:12px;color:var(--tx2);margin-top:2px}
+.b100{display:inline-block;font-size:9px;padding:2px 6px;border-radius:4px;font-weight:800;margin-left:6px;background:var(--adim);color:var(--amb);border:1px solid var(--amb);vertical-align:middle}
+.lextra{font-size:15px;font-weight:800;flex-shrink:0;letter-spacing:-.5px}
+.lextra.g{color:var(--grn)}
+.lextra.r{color:var(--red)}
+.ldel{background:none;border:none;cursor:pointer;color:var(--tx3);font-size:16px;padding:4px 8px;border-radius:6px}
+.ldel:active{color:var(--red)}
+.empty{text-align:center;padding:3rem 0;color:var(--tx3);font-size:14px}
+
+/* SCHEDULE */
+.st{width:100%;border-collapse:collapse}
+.st th{font-size:10px;color:var(--tx3);font-weight:700;text-transform:uppercase;letter-spacing:.8px;padding:0 0 10px;text-align:left}
+.st th:not(:first-child){text-align:center}
+.sr{border-top:1px solid var(--b1)}
+.sr td{padding:8px 0}
+.dlbl{font-size:13px;font-weight:700;color:var(--tx2);width:36px}
+.tcc{text-align:center}
+.tog{position:relative;width:36px;height:20px;cursor:pointer;display:inline-block}
+.tog input{opacity:0;width:0;height:0;position:absolute}
+.tog-t{position:absolute;inset:0;background:var(--b2);border-radius:10px;transition:background .2s}
+.tog input:checked~.tog-t{background:var(--cyan)}
+.tog-th{position:absolute;top:2px;left:2px;width:16px;height:16px;background:#fff;border-radius:50%;transition:transform .2s;pointer-events:none}
+.tog input:checked~.tog-th{transform:translateX(16px)}
+.ti{height:38px;padding:0 8px;font-size:13px;width:80px;text-align:center;background:var(--surf2);border:1px solid var(--b1);border-radius:8px;color:var(--tx);outline:none;-webkit-appearance:none}
+.ti:focus{border-color:var(--cyan)}
+.ti:disabled{opacity:.3}
+
+/* USER */
+.ucard{display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid var(--b1);margin-bottom:14px}
+.uav{width:44px;height:44px;border-radius:50%;object-fit:cover;border:2px solid var(--cmid)}
+.uname{font-size:15px;font-weight:700}
+.uemail{font-size:12px;color:var(--tx2);margin-top:2px}
 
 /* TOAST */
-.toast{position:fixed;top:calc(env(safe-area-inset-top,0) + 16px);left:50%;transform:translateX(-50%);padding:10px 20px;border-radius:10px;font-size:14px;font-weight:700;z-index:999;pointer-events:none;transition:opacity .3s;white-space:nowrap}
-.toast.success{background:var(--green);color:#fff}
-.toast.error{background:var(--red);color:#fff}
-
-/* USER CARD */
-.user-card{display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid var(--border);margin-bottom:14px}
-.user-avatar{width:44px;height:44px;border-radius:50%;object-fit:cover;border:2px solid var(--cyan-mid)}
-.user-name{font-size:15px;font-weight:700;color:var(--text)}
-.user-email{font-size:12px;color:var(--text2);margin-top:2px}
+.toast{position:fixed;top:calc(env(safe-area-inset-top,0) + 16px);left:50%;transform:translateX(-50%);padding:10px 22px;border-radius:10px;font-size:14px;font-weight:700;z-index:9999;pointer-events:none;white-space:nowrap;transition:opacity .3s}
+.toast.ok{background:var(--grn);color:#fff}
+.toast.err{background:var(--red);color:#fff}
 
 .safe{height:env(safe-area-inset-bottom,0)}
 </style>
@@ -159,574 +159,416 @@ html,body{height:100%;background:var(--bg);font-family:-apple-system,BlinkMacSys
 <div id="app">
 
   <!-- LOADING -->
-  <div id="screen-loading" class="screen active">
-    <div class="loading-wrap">
-      <svg width="48" height="48" viewBox="0 0 52 52" fill="none">
+  <div id="s-load" class="scr on">
+    <div class="center-wrap">
+      <svg width="56" height="56" viewBox="0 0 52 52" fill="none">
         <rect width="52" height="52" rx="12" fill="#111827"/>
         <line x1="10" y1="14" x2="42" y2="14" stroke="#00d4ff" stroke-width="3.5" stroke-linecap="round"/>
         <line x1="26" y1="14" x2="26" y2="34" stroke="#00d4ff" stroke-width="3.5" stroke-linecap="round"/>
         <path d="M8 42 Q13 37 18 41 Q23 45 28 40 Q33 35 38 39 Q41 41 44 39" stroke="#7c3aed" stroke-width="2.5" stroke-linecap="round" fill="none"/>
       </svg>
-      <div class="spinner"></div>
-      <span class="loading-text">Carregando...</span>
+      <div class="spin"></div>
+      <span style="font-size:14px;color:var(--tx2)">Carregando...</span>
     </div>
   </div>
 
   <!-- LOGIN -->
-  <div id="screen-login" class="screen">
-    <div class="login-wrap">
+  <div id="s-login" class="scr">
+    <div class="center-wrap">
       <div class="login-logo">
-        <svg width="64" height="64" viewBox="0 0 52 52" fill="none">
+        <svg width="72" height="72" viewBox="0 0 52 52" fill="none">
           <rect width="52" height="52" rx="14" fill="#111827"/>
           <line x1="10" y1="14" x2="42" y2="14" stroke="#00d4ff" stroke-width="3.5" stroke-linecap="round"/>
           <line x1="26" y1="14" x2="26" y2="34" stroke="#00d4ff" stroke-width="3.5" stroke-linecap="round"/>
           <path d="M8 42 Q13 37 18 41 Q23 45 28 40 Q33 35 38 39 Q41 41 44 39" stroke="#7c3aed" stroke-width="2.5" stroke-linecap="round" fill="none"/>
         </svg>
-        <div>
-          <div class="login-brand">tsunami horas</div>
-          <div class="login-sub">apps</div>
-        </div>
+        <div class="login-name">tsunami horas</div>
+        <div class="login-sub">apps</div>
       </div>
-      <p class="login-desc">Controle seu banco de horas de qualquer celular. Seus dados ficam salvos na nuvem.</p>
-      <button class="btn-google" onclick="loginGoogle()">
+      <p class="login-desc">Controle seu banco de horas de qualquer celular. Seus dados ficam salvos na nuvem com segurança.</p>
+      <button class="btn-g" id="btn-login">
         <svg width="20" height="20" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.18 1.48-4.97 2.31-8.16 2.31-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>
         Entrar com Google
       </button>
-      <p class="login-footer">Seus dados são privados e<br>acessíveis só por você</p>
+      <p class="login-note">Seus dados são privados e acessíveis<br>somente por você</p>
     </div>
   </div>
 
   <!-- SETUP -->
-  <div id="screen-setup" class="screen">
-    <div class="content">
+  <div id="s-setup" class="scr">
+    <div class="pane">
       <div style="text-align:center;padding:2rem 0 1.5rem">
-        <svg width="48" height="48" viewBox="0 0 52 52" fill="none">
+        <svg width="56" height="56" viewBox="0 0 52 52" fill="none">
           <rect width="52" height="52" rx="12" fill="#111827"/>
           <line x1="10" y1="14" x2="42" y2="14" stroke="#00d4ff" stroke-width="3.5" stroke-linecap="round"/>
           <line x1="26" y1="14" x2="26" y2="34" stroke="#00d4ff" stroke-width="3.5" stroke-linecap="round"/>
           <path d="M8 42 Q13 37 18 41 Q23 45 28 40 Q33 35 38 39 Q41 41 44 39" stroke="#7c3aed" stroke-width="2.5" stroke-linecap="round" fill="none"/>
         </svg>
-        <p style="font-size:18px;font-weight:800;margin-top:12px;letter-spacing:-.5px">Bem-vindo!</p>
-        <p style="font-size:14px;color:var(--text2);margin-top:6px">Configure sua jornada para começar</p>
+        <p style="font-size:20px;font-weight:800;margin-top:14px;letter-spacing:-.5px">Bem-vindo!</p>
+        <p style="font-size:14px;color:var(--tx2);margin-top:6px">Configure sua jornada para começar</p>
       </div>
       <div class="card">
-        <div class="card-title">Saldo inicial de horas</div>
-        <div class="field">
-          <label>Saldo atual (use - para negativo)</label>
-          <input type="number" id="setup-balance" placeholder="Ex: 12.5 ou -3.0" step="0.5" inputmode="decimal">
+        <div class="ctitle">Saldo inicial de horas</div>
+        <div class="fld">
+          <label>Horas acumuladas (use - para negativo)</label>
+          <input type="number" id="setup-bal" placeholder="Ex: 12.5 ou -3.0" step="0.5" inputmode="decimal">
         </div>
-        <div class="info neutral" style="font-size:12px">Se já tem horas acumuladas ou está devendo, informe aqui.</div>
+        <div class="info n" style="font-size:12px">Se já tem horas ou está devendo, informe aqui. Caso contrário deixe em branco.</div>
       </div>
       <div class="card">
-        <div class="card-title">Minha jornada semanal</div>
-        <div class="info neutral" style="font-size:12px;margin-bottom:14px">Ative os dias que você trabalha e defina o horário.</div>
-        <table class="sched-table">
-          <thead><tr><th>Dia</th><th>Ativo</th><th>Entrada</th><th>Saída</th></tr></thead>
-          <tbody id="sched-body"></tbody>
-        </table>
+        <div class="ctitle">Minha jornada semanal</div>
+        <div class="info n" style="font-size:12px;margin-bottom:14px">Ative os dias que você trabalha e defina o horário de cada um.</div>
+        <table class="st"><thead><tr><th>Dia</th><th>Ativo</th><th>Entrada</th><th>Saída</th></tr></thead><tbody id="sched-setup"></tbody></table>
       </div>
-      <button class="btn btn-primary" onclick="saveSetup()">Começar a usar</button>
+      <button class="btn pri" onclick="doSetup()">Começar a usar</button>
       <div class="safe"></div>
     </div>
   </div>
 
   <!-- MAIN -->
-  <div id="screen-main" class="screen">
-    <div class="header">
-      <div class="header-inner">
+  <div id="s-main" class="scr">
+    <div class="hdr">
+      <div class="hdr-inner">
         <svg width="34" height="34" viewBox="0 0 52 52" fill="none">
           <rect width="52" height="52" rx="12" fill="#111827"/>
           <line x1="10" y1="14" x2="42" y2="14" stroke="#00d4ff" stroke-width="3.5" stroke-linecap="round"/>
           <line x1="26" y1="14" x2="26" y2="34" stroke="#00d4ff" stroke-width="3.5" stroke-linecap="round"/>
           <path d="M8 42 Q13 37 18 41 Q23 45 28 40 Q33 35 38 39 Q41 41 44 39" stroke="#7c3aed" stroke-width="2.5" stroke-linecap="round" fill="none"/>
         </svg>
-        <div class="brand"><span class="brand-name">tsunami horas</span><span class="brand-sub">apps</span></div>
-        <div class="header-right">
-          <div id="user-avatar-wrap"></div>
-        </div>
+        <div><div class="brand-name">tsunami horas</div><div class="brand-sub">apps</div></div>
+        <div class="hdr-right" id="av-wrap"></div>
       </div>
       <div class="tabs">
-        <div class="tab active" onclick="showTab('resumo')">Resumo</div>
-        <div class="tab" onclick="showTab('lancar')">Lançar</div>
-        <div class="tab" onclick="showTab('historico')">Histórico</div>
-        <div class="tab" onclick="showTab('config')">Config</div>
+        <div class="tab on" onclick="goTab('resumo')">Resumo</div>
+        <div class="tab" onclick="goTab('lancar')">Lançar</div>
+        <div class="tab" onclick="goTab('historico')">Histórico</div>
+        <div class="tab" onclick="goTab('config')">Config</div>
       </div>
     </div>
 
     <!-- RESUMO -->
-    <div id="tab-resumo" class="content">
-      <div class="metrics-grid">
-        <div class="metric">
-          <div class="metric-label">Saldo atual</div>
-          <div class="metric-value" id="bal-val">0h00</div>
-          <div class="prog"><div class="prog-fill" id="bal-bar" style="width:0%"></div></div>
-        </div>
-        <div class="metric">
-          <div class="metric-label">Extras 100%</div>
-          <div class="metric-value accent" id="extra100-val">0h00</div>
-        </div>
+    <div id="t-resumo" class="pane">
+      <div class="mgrid">
+        <div class="met"><div class="mlbl">Saldo atual</div><div class="mval" id="v-bal">0h00</div><div class="prog"><div class="pb" id="v-bar" style="width:0%"></div></div></div>
+        <div class="met"><div class="mlbl">Extras 100%</div><div class="mval amb" id="v-100">0h00</div></div>
       </div>
-      <div class="metrics-grid">
-        <div class="metric">
-          <div class="metric-label">Dias lançados</div>
-          <div class="metric-value neutral" id="days-val" style="font-size:32px">0</div>
-        </div>
-        <div class="metric">
-          <div class="metric-label">Total trabalhado</div>
-          <div class="metric-value neutral" id="total-val" style="font-size:22px">0h00</div>
-        </div>
+      <div class="mgrid">
+        <div class="met"><div class="mlbl">Dias lançados</div><div class="mval" id="v-days" style="font-size:32px">0</div></div>
+        <div class="met"><div class="mlbl">Total trabalhado</div><div class="mval" id="v-tot" style="font-size:22px">0h00</div></div>
       </div>
-      <div class="card">
-        <div class="card-title">Últimos lançamentos</div>
-        <div id="recent-list"><div class="empty">Nenhum lançamento ainda</div></div>
-      </div>
+      <div class="card"><div class="ctitle">Últimos lançamentos</div><div id="l-recent"><div class="empty">Nenhum lançamento ainda</div></div></div>
       <div class="safe"></div>
     </div>
 
     <!-- LANÇAR -->
-    <div id="tab-lancar" class="content" style="display:none">
+    <div id="t-lancar" class="pane" style="display:none">
       <div class="card">
-        <div class="card-title">Novo lançamento</div>
-        <div class="field">
-          <label>Data</label>
-          <input type="date" id="entry-date">
-        </div>
-        <div id="day-info" style="display:none"></div>
-        <div class="field">
-          <label>Tipo</label>
-          <div class="tag-row">
-            <span class="tag active" data-type="normal" onclick="setType('normal')">Normal</span>
-            <span class="tag" data-type="half" onclick="setType('half')">Antecipado</span>
-            <span class="tag" data-type="extra" onclick="setType('extra')">Hora extra</span>
-            <span class="tag" data-type="full100" onclick="setType('full100')">100% fer/dom</span>
+        <div class="ctitle">Novo lançamento</div>
+        <div class="fld"><label>Data</label><input type="date" id="e-date" onchange="onDateChange()"></div>
+        <div id="e-dayinfo" style="display:none"></div>
+        <div class="fld"><label>Tipo</label>
+          <div class="tags">
+            <span class="tag on" data-t="normal" onclick="setTipo('normal')">Normal</span>
+            <span class="tag" data-t="half" onclick="setTipo('half')">Antecipado</span>
+            <span class="tag" data-t="extra" onclick="setTipo('extra')">Hora extra</span>
+            <span class="tag" data-t="f100" onclick="setTipo('f100')">100% fer/dom</span>
           </div>
         </div>
-        <div class="grid2">
-          <div class="field"><label>Entrada</label><input type="time" id="entrada"></div>
-          <div class="field"><label>Saída</label><input type="time" id="saida"></div>
+        <div class="time-wrap">
+          <div class="fld"><label>Entrada</label><input type="time" id="e-in" onchange="onTimeChange()"></div>
+          <div class="fld"><label>Saída</label><input type="time" id="e-out" onchange="onTimeChange()"></div>
         </div>
-        <div id="preview" style="display:none"></div>
-        <button class="btn btn-primary" id="btn-lancar" onclick="addEntry()">Lançar dia</button>
+        <div id="e-prev" style="display:none"></div>
+        <button class="btn pri" id="btn-add" onclick="doAdd()">Lançar dia</button>
       </div>
       <div class="safe"></div>
     </div>
 
     <!-- HISTÓRICO -->
-    <div id="tab-historico" class="content" style="display:none">
-      <div class="card">
-        <div class="card-title">Todos os lançamentos</div>
-        <div id="full-list"><div class="empty">Nenhum lançamento ainda</div></div>
-      </div>
+    <div id="t-historico" class="pane" style="display:none">
+      <div class="card"><div class="ctitle">Todos os lançamentos</div><div id="l-full"><div class="empty">Nenhum lançamento ainda</div></div></div>
       <div class="safe"></div>
     </div>
 
     <!-- CONFIG -->
-    <div id="tab-config" class="content" style="display:none">
-      <div class="card">
-        <div class="card-title">Minha conta</div>
-        <div id="user-info-card"></div>
-        <button class="btn btn-ghost" onclick="logout()">Sair da conta</button>
-      </div>
-      <div class="card">
-        <div class="card-title">Saldo inicial</div>
-        <div class="field">
-          <label>Saldo de horas (positivo ou negativo)</label>
-          <input type="number" id="cfg-balance" step="0.5" inputmode="decimal">
-        </div>
-      </div>
-      <div class="card">
-        <div class="card-title">Jornada semanal</div>
-        <table class="sched-table">
-          <thead><tr><th>Dia</th><th>Ativo</th><th>Entrada</th><th>Saída</th></tr></thead>
-          <tbody id="cfg-sched-body"></tbody>
-        </table>
-      </div>
-      <button class="btn btn-primary" onclick="saveConfig()">Salvar configuração</button>
-      <button class="btn btn-danger" onclick="confirmReset()">Apagar todos os lançamentos</button>
+    <div id="t-config" class="pane" style="display:none">
+      <div class="card"><div class="ctitle">Minha conta</div><div id="cfg-user"></div><button class="btn gho" onclick="doLogout()">Sair da conta</button></div>
+      <div class="card"><div class="ctitle">Saldo inicial</div><div class="fld"><label>Horas (positivo ou negativo)</label><input type="number" id="cfg-bal" step="0.5" inputmode="decimal"></div></div>
+      <div class="card"><div class="ctitle">Jornada semanal</div><table class="st"><thead><tr><th>Dia</th><th>Ativo</th><th>Entrada</th><th>Saída</th></tr></thead><tbody id="sched-cfg"></tbody></table></div>
+      <button class="btn pri" onclick="doSaveCfg()">Salvar configuração</button>
+      <button class="btn dan" onclick="doReset()">Apagar todos os lançamentos</button>
       <div class="safe"></div>
     </div>
   </div>
 
 </div>
-
 <script type="module">
-import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
-import { getAuth, GoogleAuthProvider, signInWithRedirect, signOut, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
-import { getFirestore, doc, getDoc, setDoc, updateDoc, collection, addDoc, getDocs, deleteDoc, query, orderBy } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+import{initializeApp}from'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
+import{getAuth,GoogleAuthProvider,signInWithRedirect,getRedirectResult,signOut,onAuthStateChanged}from'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
+import{getFirestore,doc,getDoc,setDoc,collection,addDoc,getDocs,deleteDoc,query,orderBy}from'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
 
-const firebaseConfig = {
-  apiKey: "AIzaSyDHQjCocBu9xYUwn-zL4Eey1zUTOXQq51E",
-  authDomain: "tsunami-horas.firebaseapp.com",
-  projectId: "tsunami-horas",
-  storageBucket: "tsunami-horas.firebasestorage.app",
-  messagingSenderId: "699377406772",
-  appId: "1:699377406772:web:9c69a90fa90f783b6f0b61"
-};
-
-const fbApp = initializeApp(firebaseConfig);
-const auth = getAuth(fbApp);
-const db = getFirestore(fbApp);
-
-// Handle redirect result on page load
-getRedirectResult(auth).then(result => {
-  if(result?.user) console.log('Redirect login ok');
-}).catch(e => { if(e.code !== 'auth/no-current-user') console.error(e); });
+const app=initializeApp({apiKey:"AIzaSyDHQjCocBu9xYUwn-zL4Eey1zUTOXQq51E",authDomain:"tsunami-horas.firebaseapp.com",projectId:"tsunami-horas",storageBucket:"tsunami-horas.firebasestorage.app",messagingSenderId:"699377406772",appId:"1:699377406772:web:9c69a90fa90f783b6f0b61"});
+const auth=getAuth(app);
+const db=getFirestore(app);
+const provider=new GoogleAuthProvider();
 
 const DAYS=['Dom','Seg','Ter','Qua','Qui','Sex','Sáb'];
-const MONTHS=['jan','fev','mar','abr','mai','jun','jul','ago','set','out','nov','dez'];
-const HOLIDAYS=['2025-01-01','2025-02-03','2025-02-04','2025-04-18','2025-04-19','2025-04-21','2025-05-01','2025-06-19','2025-09-07','2025-10-12','2025-11-02','2025-11-15','2025-11-20','2025-12-08','2025-12-25','2026-01-01','2026-02-16','2026-02-17','2026-04-03','2026-04-04','2026-04-21','2026-05-01','2026-06-04','2026-09-07','2026-10-12','2026-11-02','2026-11-15','2026-11-20','2026-12-08','2026-12-25','2027-01-01','2027-02-15','2027-02-16','2027-03-26','2027-04-21','2027-05-01','2027-05-24','2027-09-07','2027-10-12','2027-11-02','2027-11-15','2027-11-20','2027-12-08','2027-12-25'];
+const MON=['jan','fev','mar','abr','mai','jun','jul','ago','set','out','nov','dez'];
+const HOL=['2025-01-01','2025-02-03','2025-02-04','2025-04-18','2025-04-19','2025-04-21','2025-05-01','2025-06-19','2025-09-07','2025-10-12','2025-11-02','2025-11-15','2025-11-20','2025-12-08','2025-12-25','2026-01-01','2026-02-16','2026-02-17','2026-04-03','2026-04-04','2026-04-21','2026-05-01','2026-06-04','2026-09-07','2026-10-12','2026-11-02','2026-11-15','2026-11-20','2026-12-08','2026-12-25','2027-01-01','2027-02-15','2027-02-16','2027-03-26','2027-04-21','2027-05-01','2027-05-24','2027-09-07','2027-10-12','2027-11-02','2027-11-15','2027-11-20','2027-12-08','2027-12-25'];
 const HNAMES={'01-01':'Confraternização Universal','02-03':'Carnaval','02-04':'Carnaval','02-15':'Carnaval','02-16':'Carnaval','02-17':'Carnaval','03-26':'Paixão de Cristo','04-03':'Paixão de Cristo','04-04':'Paixão de Cristo','04-18':'Paixão de Cristo','04-19':'Paixão de Cristo','04-21':'Tiradentes','05-01':'Dia do Trabalhador','05-24':'Corpus Christi','06-04':'Corpus Christi','06-19':'Corpus Christi','09-07':'Independência','10-12':'N. Sra. Aparecida','11-02':'Finados','11-15':'Proclamação da República','11-20':'Consciência Negra','12-08':'Imaculada Conceição','12-25':'Natal'};
-const DEFAULT_SCHED=[{active:false,in:'',out:''},{active:true,in:'08:00',out:'17:00'},{active:true,in:'08:00',out:'17:00'},{active:true,in:'08:00',out:'17:00'},{active:true,in:'08:00',out:'17:00'},{active:true,in:'08:00',out:'17:00'},{active:false,in:'',out:''}];
+const DEF_SCHED=[{a:false,i:'',o:''},{a:true,i:'08:00',o:'17:00'},{a:true,i:'08:00',o:'17:00'},{a:true,i:'08:00',o:'17:00'},{a:true,i:'08:00',o:'17:00'},{a:true,i:'08:00',o:'17:00'},{a:false,i:'',o:''}];
 
-let currentUser=null;
-let userProfile={balance:0,sched:JSON.parse(JSON.stringify(DEFAULT_SCHED))};
-let entries=[];
-let selType='normal';
+let CU=null,UP={bal:0,sched:JSON.parse(JSON.stringify(DEF_SCHED)),tot:0,e100:0},ENT=[],TIPO='normal';
 
 // UTILS
-function toMin(t){if(!t)return 0;const[h,m]=t.split(':').map(Number);return h*60+m}
-function fmtH(min){const neg=min<0;const a=Math.abs(Math.round(min));return(neg?'-':'')+Math.floor(a/60)+'h'+String(a%60).padStart(2,'0')}
-function isHol(d){return HOLIDAYS.includes(d)}
-function isSun(d){return new Date(d+'T12:00:00').getDay()===0}
-function isSpec(d){return isHol(d)||isSun(d)}
-function getHolName(d){return HNAMES[d.slice(5)]||'Feriado'}
-function getDow(d){return new Date(d+'T12:00:00').getDay()}
-function getDayLabel(d){const dt=new Date(d+'T12:00:00');return DAYS[dt.getDay()]+' '+dt.getDate()+' '+MONTHS[dt.getMonth()]}
-function getSchedForDay(d){return userProfile.sched[getDow(d)]}
+const $=id=>document.getElementById(id);
+const toM=t=>{if(!t)return 0;const[h,m]=t.split(':').map(Number);return h*60+m};
+const fmtH=m=>{const n=m<0;const a=Math.abs(Math.round(m));return(n?'-':'')+Math.floor(a/60)+'h'+String(a%60).padStart(2,'0')};
+const isHol=d=>HOL.includes(d);
+const isSun=d=>new Date(d+'T12:00:00').getDay()===0;
+const isSpec=d=>isHol(d)||isSun(d);
+const holName=d=>HNAMES[d.slice(5)]||'Feriado';
+const dow=d=>new Date(d+'T12:00:00').getDay();
+const dayLbl=d=>{const dt=new Date(d+'T12:00:00');return DAYS[dt.getDay()]+' '+dt.getDate()+' '+MON[dt.getMonth()]};
+const sched4=d=>UP.sched[dow(d)]||{a:false,i:'',o:''};
 
-// SCREENS
-function showScreen(id){
-  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
-  document.getElementById('screen-'+id).classList.add('active');
-}
-
-function showTab(t){
-  ['resumo','lancar','historico','config'].forEach(id=>{
-    document.getElementById('tab-'+id).style.display=id===t?'block':'none';
-  });
-  document.querySelectorAll('.tab').forEach((el,i)=>{
-    el.classList.toggle('active',['resumo','lancar','historico','config'][i]===t);
-  });
-  if(t==='config') loadConfigTab();
-}
+// SCREEN
+function show(id){document.querySelectorAll('.scr').forEach(s=>s.classList.remove('on'));$(id).classList.add('on')}
 
 // TOAST
-function toast(msg,type='success'){
-  const el=document.createElement('div');
-  el.className=`toast ${type}`;
-  el.textContent=msg;
-  document.body.appendChild(el);
-  setTimeout(()=>{el.style.opacity='0';setTimeout(()=>el.remove(),300)},2000);
-}
+window.toast=function(msg,t='ok'){const el=document.createElement('div');el.className=`toast ${t}`;el.textContent=msg;document.body.appendChild(el);setTimeout(()=>{el.style.opacity='0';setTimeout(()=>el.remove(),300)},2200)}
 
 // AUTH
-window.loginGoogle=async function(){
-  try{
-    const provider=new GoogleAuthProvider();
-    await signInWithRedirect(auth,provider);
-  }catch(e){toast('Erro ao fazer login','error')}
-}
+document.getElementById('btn-login').onclick=()=>signInWithRedirect(auth,provider);
+window.doLogout=()=>confirm('Sair da conta?')&&signOut(auth);
 
-window.logout=async function(){
-  if(confirm('Sair da conta?')){await signOut(auth)}
-}
-
-onAuthStateChanged(auth,async user=>{
-  if(user){
-    currentUser=user;
-    await loadUserData();
-  } else {
-    currentUser=null;
-    showScreen('login');
-  }
+// Handle redirect result first, then watch auth state
+getRedirectResult(auth).catch(()=>{}).finally(()=>{
+  onAuthStateChanged(auth,async u=>{
+    if(u){CU=u;await loadData();}
+    else{CU=null;show('s-login');}
+  });
 });
 
 // FIRESTORE
-async function loadUserData(){
+async function loadData(){
   try{
-    const profileRef=doc(db,'users',currentUser.uid);
-    const snap=await getDoc(profileRef);
+    const snap=await getDoc(doc(db,'users',CU.uid));
     if(snap.exists()){
-      userProfile=snap.data();
-      if(!userProfile.sched)userProfile.sched=JSON.parse(JSON.stringify(DEFAULT_SCHED));
+      const d=snap.data();
+      UP={bal:d.bal||0,sched:d.sched||JSON.parse(JSON.stringify(DEF_SCHED)),tot:d.tot||0,e100:d.e100||0};
+      if(!UP.sched)UP.sched=JSON.parse(JSON.stringify(DEF_SCHED));
       await loadEntries();
-      setupMainScreen();
-      showScreen('main');
+      initMain();show('s-main');
     } else {
-      buildSchedTable('sched-body',userProfile.sched);
-      showScreen('setup');
+      buildSched('sched-setup',UP.sched);show('s-setup');
     }
-  }catch(e){toast('Erro ao carregar dados','error');showScreen('login')}
+  }catch(e){toast('Erro ao carregar dados','err');show('s-login');}
 }
 
 async function loadEntries(){
-  entries=[];
+  ENT=[];
   try{
-    const q=query(collection(db,'users',currentUser.uid,'entries'),orderBy('date','desc'));
-    const snap=await getDocs(q);
-    snap.forEach(d=>entries.push({id:d.id,...d.data()}));
+    const q=query(collection(db,'users',CU.uid,'entries'),orderBy('date','desc'));
+    const s=await getDocs(q);
+    s.forEach(d=>ENT.push({id:d.id,...d.data()}));
   }catch(e){}
 }
 
-async function saveProfile(){
-  await setDoc(doc(db,'users',currentUser.uid),userProfile,{merge:true});
-}
+async function saveProfile(){await setDoc(doc(db,'users',CU.uid),{bal:UP.bal,sched:UP.sched,tot:UP.tot,e100:UP.e100},{merge:true})}
 
 // SETUP
-window.saveSetup=async function(){
-  const ib=parseFloat(document.getElementById('setup-balance').value)||0;
-  userProfile.balance=Math.round(ib*60);
-  userProfile.extra100=0;
-  userProfile.totalWorked=0;
-  const rows=document.querySelectorAll('#sched-body .sched-row');
-  rows.forEach((_,i)=>{
-    const dow=i+1;
-    const cb=document.querySelector(`#sched-body input[data-dow="${dow}"]`);
-    const inEl=document.querySelector(`#sched-body input[data-dow="${dow}"][data-field="in"]`);
-    const outEl=document.querySelector(`#sched-body input[data-dow="${dow}"][data-field="out"]`);
-    userProfile.sched[dow]={active:cb?cb.checked:false,in:inEl?inEl.value:'',out:outEl?outEl.value:''};
-  });
+window.doSetup=async function(){
+  UP.bal=Math.round((parseFloat($('setup-bal').value)||0)*60);
+  UP.tot=0;UP.e100=0;
+  readSched('sched-setup');
   await saveProfile();
-  setupMainScreen();
-  showScreen('main');
+  initMain();show('s-main');
 }
 
-// MAIN SCREEN
-function setupMainScreen(){
+// MAIN INIT
+function initMain(){
   const today=new Date().toISOString().slice(0,10);
-  document.getElementById('entry-date').value=today;
-  updateAvatarHeader();
-  updateDateInfo();
-  updateUI();
+  $('e-date').value=today;
+  updateAvatar();
+  onDateChange();
+  renderUI();
 }
 
-function updateAvatarHeader(){
-  const wrap=document.getElementById('user-avatar-wrap');
-  if(currentUser?.photoURL){
-    wrap.innerHTML=`<img src="${currentUser.photoURL}" class="avatar" onclick="showTab('config')" title="${currentUser.displayName}">`;
-  } else {
-    const initials=(currentUser?.displayName||'?').split(' ').map(n=>n[0]).join('').slice(0,2).toUpperCase();
-    wrap.innerHTML=`<div class="avatar-placeholder" onclick="showTab('config')">${initials}</div>`;
-  }
+function updateAvatar(){
+  const w=$('av-wrap');
+  if(CU?.photoURL)w.innerHTML=`<img src="${CU.photoURL}" class="av" onclick="goTab('config')">`;
+  else{const i=(CU?.displayName||'?').split(' ').map(n=>n[0]).join('').slice(0,2).toUpperCase();w.innerHTML=`<div class="av-ph" onclick="goTab('config')">${i}</div>`;}
 }
 
-// SCHEDULE TABLE
-function buildSchedTable(tbodyId,schedData){
-  const tbody=document.getElementById(tbodyId);
-  if(!tbody)return;
-  tbody.innerHTML='';
-  for(let i=1;i<=6;i++){
-    const day=schedData[i]||{active:false,in:'',out:''};
-    const tr=document.createElement('tr');
-    tr.className='sched-row';
-    tr.innerHTML=`
-      <td><span class="day-label">${DAYS[i]}</span></td>
-      <td class="td-center">
-        <label class="toggle">
-          <input type="checkbox" data-dow="${i}" ${day.active?'checked':''} onchange="toggleDay(${i},'${tbodyId}')">
-          <div class="toggle-track"></div>
-          <div class="toggle-thumb"></div>
-        </label>
-      </td>
-      <td class="td-center"><input class="time-input" type="time" data-dow="${i}" data-field="in" value="${day.in||''}" ${!day.active?'disabled':''} onchange="updateSchedTime(${i},'in',this.value,'${tbodyId}')"></td>
-      <td class="td-center"><input class="time-input" type="time" data-dow="${i}" data-field="out" value="${day.out||''}" ${!day.active?'disabled':''} onchange="updateSchedTime(${i},'out',this.value,'${tbodyId}')"></td>`;
-    tbody.appendChild(tr);
-  }
+// TABS
+window.goTab=function(t){
+  ['resumo','lancar','historico','config'].forEach(id=>{$('t-'+id).style.display=id===t?'block':'none'});
+  document.querySelectorAll('.tab').forEach((el,i)=>el.classList.toggle('on',['resumo','lancar','historico','config'][i]===t));
+  if(t==='config')loadCfgTab();
 }
 
-window.toggleDay=function(dow,tbodyId){
-  const cb=document.querySelector(`#${tbodyId} input[data-dow="${dow}"]`);
-  const inputs=document.querySelectorAll(`#${tbodyId} input[data-dow="${dow}"][data-field]`);
-  inputs.forEach(inp=>inp.disabled=!cb.checked);
+// DATE / TYPE
+window.onDateChange=function(){
+  const d=$('e-date').value;if(!d)return;
+  const sc=sched4(d);
+  if(sc.a){$('e-in').value=sc.i||'';$('e-out').value=sc.o||'';}
+  const bar=$('e-dayinfo');
+  if(isHol(d)){bar.style.display='block';bar.className='info w';bar.textContent='Feriado: '+holName(d)+' — marque como 100% se trabalhou';if(TIPO==='normal')setTipo('f100');}
+  else if(isSun(d)){bar.style.display='block';bar.className='info w';bar.textContent='Domingo — marque como 100% se trabalhou';if(TIPO==='normal')setTipo('f100');}
+  else if(!sc.a){bar.style.display='block';bar.className='info n';bar.textContent='Este dia não está na sua jornada configurada.';if(TIPO==='f100')setTipo('extra');}
+  else{bar.style.display='none';if(TIPO==='f100')setTipo('normal');}
+  onTimeChange();
 }
 
-window.updateSchedTime=function(dow,field,val,tbodyId){}
-
-// LANÇAR
-window.setType=function(t){
-  selType=t;
+window.setTipo=function(t){
+  TIPO=t;
   document.querySelectorAll('.tag').forEach(el=>{
-    el.classList.remove('active','active-amber');
-    if(el.dataset.type===t) el.classList.add(t==='full100'?'active-amber':'active');
+    el.classList.remove('on','on-a');
+    if(el.dataset.t===t)el.classList.add(t==='f100'?'on-a':'on');
   });
-  updatePreview();
+  onTimeChange();
 }
 
-window.updateDateInfo=function(){
-  const d=document.getElementById('entry-date').value;
-  if(!d)return;
-  const sched=getSchedForDay(d);
-  if(sched?.active){
-    document.getElementById('entrada').value=sched.in||'';
-    document.getElementById('saida').value=sched.out||'';
-  }
-  const bar=document.getElementById('day-info');
-  if(isHol(d)){
-    bar.style.display='block';bar.className='info warn';
-    bar.textContent='Feriado: '+getHolName(d)+' — marque como 100% se trabalhou';
-    if(selType==='normal')window.setType('full100');
-  } else if(isSun(d)){
-    bar.style.display='block';bar.className='info warn';
-    bar.textContent='Domingo — marque como 100% se trabalhou';
-    if(selType==='normal')window.setType('full100');
-  } else if(!sched?.active){
-    bar.style.display='block';bar.className='info neutral';
-    bar.textContent='Este dia não está na sua jornada.';
-    if(selType==='full100')window.setType('extra');
-  } else {
-    bar.style.display='none';
-    if(selType==='full100')window.setType('normal');
-  }
-  updatePreview();
-}
-
-function calcResult(){
-  const d=document.getElementById('entry-date').value;
-  const ent=document.getElementById('entrada').value;
-  const sai=document.getElementById('saida').value;
-  if(!d||!ent||!sai)return null;
-  const worked=toMin(sai)-toMin(ent)-60;
-  const sched=getSchedForDay(d);
-  const daily=sched?.active?toMin(sched.out)-toMin(sched.in)-60:0;
-  const spec=isSpec(d)||selType==='full100';
-  if(spec)return{extra:worked,raw:worked,spec:true};
-  return{extra:worked-daily,raw:worked,spec:false};
-}
-
-function updatePreview(){
-  const bar=document.getElementById('preview');
-  const r=calcResult();
+window.onTimeChange=function(){
+  const bar=$('e-prev');
+  const r=calc();
   if(!r){bar.style.display='none';return;}
   bar.style.display='block';
-  if(r.spec){bar.className='info warn';bar.textContent='Trabalhado: '+fmtH(r.raw)+' — registrado como 100% extra';}
-  else if(r.extra>0){bar.className='info good';bar.textContent='Horas extras: +'+fmtH(r.extra)+' no saldo';}
-  else if(r.extra<0){bar.className='info danger';bar.textContent='Saída antecipada: '+fmtH(r.extra)+' no saldo';}
-  else{bar.className='info neutral';bar.textContent='Jornada completa — saldo inalterado';}
+  if(r.spec){bar.className='info w';bar.textContent='Trabalhado: '+fmtH(r.raw)+' — registrado como 100% extra';}
+  else if(r.extra>0){bar.className='info g';bar.textContent='Horas extras: +'+fmtH(r.extra)+' no saldo';}
+  else if(r.extra<0){bar.className='info d';bar.textContent='Saída antecipada: '+fmtH(r.extra)+' no saldo';}
+  else{bar.className='info n';bar.textContent='Jornada completa — saldo inalterado';}
 }
 
-window.addEntry=async function(){
-  const d=document.getElementById('entry-date').value;
-  if(!d){toast('Selecione a data','error');return;}
-  const ent=document.getElementById('entrada').value;
-  const sai=document.getElementById('saida').value;
-  if(!ent||!sai){toast('Preencha entrada e saída','error');return;}
-  const r=calcResult();if(!r)return;
-  const btn=document.getElementById('btn-lancar');
-  btn.disabled=true;btn.textContent='Salvando...';
+function calc(){
+  const d=$('e-date').value,ei=$('e-in').value,eo=$('e-out').value;
+  if(!d||!ei||!eo)return null;
+  const worked=toM(eo)-toM(ei)-60;
+  const sc=sched4(d);
+  const daily=sc.a?toM(sc.o)-toM(sc.i)-60:0;
+  const spec=isSpec(d)||TIPO==='f100';
+  return spec?{extra:worked,raw:worked,spec:true}:{extra:worked-daily,raw:worked,spec:false};
+}
+
+// ADD ENTRY
+window.doAdd=async function(){
+  const d=$('e-date').value;if(!d){toast('Selecione a data','err');return;}
+  const ei=$('e-in').value,eo=$('e-out').value;
+  if(!ei||!eo){toast('Preencha entrada e saída','err');return;}
+  const r=calc();if(!r)return;
+  const btn=$('btn-add');btn.disabled=true;btn.textContent='Salvando...';
   try{
-    const entry={date:d,entrada:ent,saida:sai,extra:r.extra,raw:r.raw,spec:r.spec,type:selType,createdAt:Date.now()};
-    const ref=await addDoc(collection(db,'users',currentUser.uid,'entries'),entry);
-    entries.unshift({id:ref.id,...entry});
-    userProfile.balance=(userProfile.balance||0)+r.extra;
-    userProfile.totalWorked=(userProfile.totalWorked||0)+r.raw;
-    if(r.spec)userProfile.extra100=(userProfile.extra100||0)+r.raw;
+    const entry={date:d,ei,eo,extra:r.extra,raw:r.raw,spec:r.spec,tipo:TIPO,ts:Date.now()};
+    const ref=await addDoc(collection(db,'users',CU.uid,'entries'),entry);
+    ENT.unshift({id:ref.id,...entry});
+    UP.bal+=r.extra;UP.tot+=r.raw;
+    if(r.spec)UP.e100+=r.raw;
     await saveProfile();
-    updateUI();
-    window.setType('normal');
-    showTab('resumo');
-    toast('Lançamento salvo!');
-  }catch(e){toast('Erro ao salvar','error');}
+    renderUI();setTipo('normal');goTab('resumo');toast('Lançamento salvo!');
+  }catch(e){toast('Erro ao salvar','err');}
   btn.disabled=false;btn.textContent='Lançar dia';
 }
 
-window.deleteEntry=async function(id){
+// DELETE
+window.delEntry=async function(id){
   if(!confirm('Excluir este lançamento?'))return;
   try{
-    const idx=entries.findIndex(e=>e.id===id);if(idx<0)return;
-    const e=entries[idx];
-    await deleteDoc(doc(db,'users',currentUser.uid,'entries',id));
-    userProfile.balance-=e.extra;
-    userProfile.totalWorked-=e.raw;
-    if(e.spec)userProfile.extra100-=e.raw;
-    entries.splice(idx,1);
-    await saveProfile();
-    updateUI();
-    toast('Lançamento excluído');
-  }catch(err){toast('Erro ao excluir','error');}
+    const idx=ENT.findIndex(e=>e.id===id);if(idx<0)return;
+    const e=ENT[idx];
+    await deleteDoc(doc(db,'users',CU.uid,'entries',id));
+    UP.bal-=e.extra;UP.tot-=e.raw;
+    if(e.spec)UP.e100-=e.raw;
+    ENT.splice(idx,1);
+    await saveProfile();renderUI();toast('Excluído');
+  }catch(e){toast('Erro','err');}
 }
 
 // CONFIG
-function loadConfigTab(){
-  document.getElementById('cfg-balance').value=((userProfile.balance||0)/60).toFixed(1);
-  buildSchedTable('cfg-sched-body',userProfile.sched);
-  const u=currentUser;
-  document.getElementById('user-info-card').innerHTML=`
-    <div class="user-card">
-      ${u.photoURL?`<img src="${u.photoURL}" class="user-avatar">`:'<div class="avatar-placeholder" style="width:44px;height:44px;font-size:16px">'+(u.displayName||'?').split(' ').map(n=>n[0]).join('').slice(0,2).toUpperCase()+'</div>'}
-      <div><div class="user-name">${u.displayName||'Usuário'}</div><div class="user-email">${u.email}</div></div>
-    </div>`;
+function loadCfgTab(){
+  $('cfg-bal').value=(UP.bal/60).toFixed(1);
+  buildSched('sched-cfg',UP.sched);
+  const u=CU;
+  $('cfg-user').innerHTML=`<div class="ucard">${u.photoURL?`<img src="${u.photoURL}" class="uav">`:'<div class="av-ph" style="width:44px;height:44px;font-size:16px">'+(u.displayName||'?').split(' ').map(n=>n[0]).join('').slice(0,2).toUpperCase()+'</div>'}<div><div class="uname">${u.displayName||'Usuário'}</div><div class="uemail">${u.email}</div></div></div>`;
 }
 
-window.saveConfig=async function(){
-  userProfile.balance=Math.round((parseFloat(document.getElementById('cfg-balance').value)||0)*60);
-  const rows=document.querySelectorAll('#cfg-sched-body .sched-row');
-  rows.forEach((_,i)=>{
-    const dow=i+1;
-    const cb=document.querySelector(`#cfg-sched-body input[data-dow="${dow}"]`);
-    const inEl=document.querySelector(`#cfg-sched-body input[data-dow="${dow}"][data-field="in"]`);
-    const outEl=document.querySelector(`#cfg-sched-body input[data-dow="${dow}"][data-field="out"]`);
-    if(cb)userProfile.sched[dow]={active:cb.checked,in:inEl?inEl.value:'',out:outEl?outEl.value:''};
-  });
-  await saveProfile();
-  updateUI();
-  toast('Configuração salva!');
+window.doSaveCfg=async function(){
+  UP.bal=Math.round((parseFloat($('cfg-bal').value)||0)*60);
+  readSched('sched-cfg');
+  await saveProfile();renderUI();toast('Configuração salva!');
 }
 
-window.confirmReset=async function(){
-  if(!confirm('Apagar todos os lançamentos? O saldo e a jornada serão mantidos.'))return;
+window.doReset=async function(){
+  if(!confirm('Apagar todos os lançamentos?'))return;
   try{
-    const snap=await getDocs(collection(db,'users',currentUser.uid,'entries'));
-    for(const d of snap.docs) await deleteDoc(d.ref);
-    entries=[];
-    userProfile.extra100=0;userProfile.totalWorked=0;
-    await saveProfile();
-    updateUI();
-    toast('Lançamentos apagados');
-  }catch(e){toast('Erro ao apagar','error');}
+    const snap=await getDocs(collection(db,'users',CU.uid,'entries'));
+    for(const d of snap.docs)await deleteDoc(d.ref);
+    ENT=[];UP.e100=0;UP.tot=0;
+    await saveProfile();renderUI();toast('Lançamentos apagados');
+  }catch(e){toast('Erro','err');}
 }
 
-// UI
-function updateUI(){
-  const b=userProfile.balance||0;
-  const el=document.getElementById('bal-val');
+// SCHEDULE HELPERS
+function buildSched(tbId,sc){
+  const tb=$(tbId);if(!tb)return;tb.innerHTML='';
+  for(let i=1;i<=6;i++){
+    const d=sc[i]||{a:false,i:'',o:''};
+    const tr=document.createElement('tr');tr.className='sr';
+    tr.innerHTML=`<td><span class="dlbl">${DAYS[i]}</span></td>
+      <td class="tcc"><label class="tog"><input type="checkbox" data-d="${i}" ${d.a?'checked':''} onchange="togDay(${i},'${tbId}')"><div class="tog-t"></div><div class="tog-th"></div></label></td>
+      <td class="tcc"><input class="ti" type="time" data-d="${i}" data-f="i" value="${d.i||''}" ${!d.a?'disabled':''}></td>
+      <td class="tcc"><input class="ti" type="time" data-d="${i}" data-f="o" value="${d.o||''}" ${!d.a?'disabled':''}></td>`;
+    tb.appendChild(tr);
+  }
+}
+
+window.togDay=function(d,tbId){
+  const cb=document.querySelector(`#${tbId} input[data-d="${d}"]`);
+  document.querySelectorAll(`#${tbId} input[data-d="${d}"][data-f]`).forEach(el=>el.disabled=!cb.checked);
+}
+
+function readSched(tbId){
+  for(let i=1;i<=6;i++){
+    const cb=document.querySelector(`#${tbId} input[data-d="${i}"]`);
+    const inEl=document.querySelector(`#${tbId} input[data-d="${i}"][data-f="i"]`);
+    const outEl=document.querySelector(`#${tbId} input[data-d="${i}"][data-f="o"]`);
+    if(cb)UP.sched[i]={a:cb.checked,i:inEl?inEl.value:'',o:outEl?outEl.value:''};
+  }
+}
+
+// RENDER
+function renderUI(){
+  const b=UP.bal;
+  const el=$('v-bal');
   el.textContent=(b<0?'-':'')+fmtH(Math.abs(b));
-  el.className='metric-value '+(b>=0?'pos':'neg');
+  el.className='mval '+(b>=0?'pos':'neg');
   const pct=Math.min(100,Math.abs(b)/600*100);
-  const bar=document.getElementById('bal-bar');
-  bar.style.width=pct+'%';
-  bar.style.background=b>=0?'var(--green)':'var(--red)';
-  document.getElementById('extra100-val').textContent=fmtH(userProfile.extra100||0);
-  document.getElementById('days-val').textContent=entries.length;
-  document.getElementById('total-val').textContent=fmtH(userProfile.totalWorked||0);
-  document.getElementById('recent-list').innerHTML=renderLog(entries,5);
-  document.getElementById('full-list').innerHTML=renderLog(entries,0);
+  $('v-bar').style.cssText=`width:${pct}%;background:${b>=0?'var(--grn)':'var(--red)'}`;
+  $('v-100').textContent=fmtH(UP.e100||0);
+  $('v-days').textContent=ENT.length;
+  $('v-tot').textContent=fmtH(UP.tot||0);
+  $('l-recent').innerHTML=renderList(ENT,5);
+  $('l-full').innerHTML=renderList(ENT,0);
 }
 
-function renderLog(list,limit){
+function renderList(list,lim){
   if(!list.length)return'<div class="empty">Nenhum lançamento ainda</div>';
-  const items=limit?list.slice(0,limit):list;
+  const items=lim?list.slice(0,lim):list;
   return items.map(e=>{
     const pos=e.extra>=0;
-    const dotCls=e.spec?'amber':pos?'pos':'neg';
-    const badge=e.spec?'<span class="badge-100">100%</span>':'';
-    return`<div class="log-item">
-      <div class="log-dot ${dotCls}"></div>
-      <div class="log-info">
-        <div class="log-date">${getDayLabel(e.date)}${badge}</div>
-        <div class="log-sub">${e.entrada} – ${e.saida} · ${fmtH(e.raw)} trabalhado</div>
+    return`<div class="li">
+      <div class="ldot ${e.spec?'a':pos?'g':'r'}"></div>
+      <div class="linfo">
+        <div class="ldate">${dayLbl(e.date)}${e.spec?'<span class="b100">100%</span>':''}</div>
+        <div class="lsub">${e.ei} – ${e.eo} · ${fmtH(e.raw)} trabalhado</div>
       </div>
-      <div class="log-extra ${pos?'pos':'neg'}">${pos?'+':''}${fmtH(e.extra)}</div>
-      <button class="log-del" onclick="deleteEntry('${e.id}')">✕</button>
+      <div class="lextra ${pos?'g':'r'}">${pos?'+':''}${fmtH(e.extra)}</div>
+      <button class="ldel" onclick="delEntry('${e.id}')">✕</button>
     </div>`;
   }).join('');
 }
 
-// EVENTS
-document.getElementById('entry-date').addEventListener('change',window.updateDateInfo);
-document.getElementById('entrada').addEventListener('change',updatePreview);
-document.getElementById('saida').addEventListener('change',updatePreview);
-
-if('serviceWorker' in navigator) navigator.serviceWorker.register('./sw.js').catch(()=>{});
+if('serviceWorker' in navigator)navigator.serviceWorker.register('./sw.js').catch(()=>{});
 </script>
 </body>
 </html>
