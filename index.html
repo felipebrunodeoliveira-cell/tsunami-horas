@@ -257,6 +257,10 @@ html,body{height:100%;background:var(--bg);font-family:-apple-system,BlinkMacSys
         <div class="met"><div class="mlbl">Dias lançados</div><div class="mval" id="v-days" style="font-size:32px">0</div></div>
         <div class="met"><div class="mlbl">Total trabalhado</div><div class="mval" id="v-tot" style="font-size:22px">0h00</div></div>
       </div>
+      <div class="card" id="days-card" style="margin-bottom:12px">
+        <div class="ctitle">Equivalente em dias</div>
+        <div id="v-days-equiv" style="font-size:15px;line-height:1.6;color:var(--tx2)">—</div>
+      </div>
       <div class="card"><div class="ctitle">Últimos lançamentos</div><div id="l-recent"><div class="empty">Nenhum lançamento ainda</div></div></div>
       <div class="safe"></div>
     </div>
@@ -477,6 +481,41 @@ function renderUI(){
   $('v-tot').textContent=fmtH(UP.tot||0);
   $('l-recent').innerHTML=renderList(ENT,5);
   $('l-full').innerHTML=renderList(ENT,0);
+
+  // Calculate days equivalent based on configured schedule
+  const daysEl=$('v-days-equiv');
+  if(daysEl){
+    const absMin=Math.abs(UP.bal);
+    if(absMin===0){
+      daysEl.innerHTML='<span style="color:var(--tx3)">Saldo zerado — nenhum dia de banco</span>';
+    } else {
+      // Average daily minutes from configured schedule
+      let totalMins=0,activeDays=0;
+      for(let i=1;i<=6;i++){
+        const s=UP.sched[i];
+        if(s&&s.a&&s.i&&s.o){
+          totalMins+=toM(s.o)-toM(s.i)-60;
+          activeDays++;
+        }
+      }
+      const avgDay=activeDays>0?Math.round(totalMins/activeDays):480;
+      const fullDays=Math.floor(absMin/avgDay);
+      const remMins=absMin%avgDay;
+      const pos=UP.bal>=0;
+      let txt='';
+      if(fullDays>0&&remMins>0){
+        txt=`<strong style="font-size:22px;font-weight:800;color:${pos?'var(--grn)':'var(--red)'}">${fullDays} dia${fullDays>1?'s':''} e ${fmtH(remMins)}</strong>`;
+      } else if(fullDays>0){
+        txt=`<strong style="font-size:22px;font-weight:800;color:${pos?'var(--grn)':'var(--red)'}">${fullDays} dia${fullDays>1?'s':''}</strong>`;
+      } else {
+        txt=`<strong style="font-size:22px;font-weight:800;color:${pos?'var(--grn)':'var(--red)'}">${fmtH(remMins)}</strong>`;
+      }
+      const label=pos
+        ? ' de banco acumulado — você pode folgar!'
+        : ' de débito — horas a repor';
+      daysEl.innerHTML=txt+`<span style="color:var(--tx2);font-size:13px">${label}</span>`;
+    }
+  }
 }
 
 function renderList(list,lim){
