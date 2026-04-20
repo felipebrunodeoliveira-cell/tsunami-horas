@@ -158,8 +158,8 @@ html,body{height:100%;background:var(--bg);font-family:-apple-system,BlinkMacSys
 <body>
 <div id="app">
 
-  <!-- LOADING -->
-  <div id="s-load" class="scr on">
+  <!-- LOADING (unused) -->
+  <div id="s-load" class="scr" style="display:none!important">
     <div class="center-wrap">
       <svg width="56" height="56" viewBox="0 0 52 52" fill="none">
         <rect width="52" height="52" rx="12" fill="#111827"/>
@@ -173,8 +173,8 @@ html,body{height:100%;background:var(--bg);font-family:-apple-system,BlinkMacSys
     </div>
   </div>
 
-  <!-- LOGIN -->
-  <div id="s-login" class="scr">
+  <!-- LOGIN (unused) -->
+  <div id="s-login" class="scr" style="display:none!important">
     <div class="center-wrap">
       <div class="login-logo">
         <svg width="72" height="72" viewBox="0 0 52 52" fill="none">
@@ -303,25 +303,15 @@ html,body{height:100%;background:var(--bg);font-family:-apple-system,BlinkMacSys
   </div>
 
 </div>
-<script type="module">
-import{initializeApp}from'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
-import{getAuth,GoogleAuthProvider,signInWithRedirect,getRedirectResult,signOut,onAuthStateChanged}from'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
-import{getFirestore,doc,getDoc,setDoc,collection,addDoc,getDocs,deleteDoc,query,orderBy}from'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
-
-const app=initializeApp({apiKey:"AIzaSyDHQjCocBu9xYUwn-zL4Eey1zUTOXQq51E",authDomain:"tsunami-horas.firebaseapp.com",projectId:"tsunami-horas",storageBucket:"tsunami-horas.firebasestorage.app",messagingSenderId:"699377406772",appId:"1:699377406772:web:9c69a90fa90f783b6f0b61"});
-const auth=getAuth(app);
-const db=getFirestore(app);
-const provider=new GoogleAuthProvider();
-
+<script>
 const DAYS=['Dom','Seg','Ter','Qua','Qui','Sex','Sáb'];
 const MON=['jan','fev','mar','abr','mai','jun','jul','ago','set','out','nov','dez'];
 const HOL=['2025-01-01','2025-02-03','2025-02-04','2025-04-18','2025-04-19','2025-04-21','2025-05-01','2025-06-19','2025-09-07','2025-10-12','2025-11-02','2025-11-15','2025-11-20','2025-12-08','2025-12-25','2026-01-01','2026-02-16','2026-02-17','2026-04-03','2026-04-04','2026-04-21','2026-05-01','2026-06-04','2026-09-07','2026-10-12','2026-11-02','2026-11-15','2026-11-20','2026-12-08','2026-12-25','2027-01-01','2027-02-15','2027-02-16','2027-03-26','2027-04-21','2027-05-01','2027-05-24','2027-09-07','2027-10-12','2027-11-02','2027-11-15','2027-11-20','2027-12-08','2027-12-25'];
 const HNAMES={'01-01':'Confraternização Universal','02-03':'Carnaval','02-04':'Carnaval','02-15':'Carnaval','02-16':'Carnaval','02-17':'Carnaval','03-26':'Paixão de Cristo','04-03':'Paixão de Cristo','04-04':'Paixão de Cristo','04-18':'Paixão de Cristo','04-19':'Paixão de Cristo','04-21':'Tiradentes','05-01':'Dia do Trabalhador','05-24':'Corpus Christi','06-04':'Corpus Christi','06-19':'Corpus Christi','09-07':'Independência','10-12':'N. Sra. Aparecida','11-02':'Finados','11-15':'Proclamação da República','11-20':'Consciência Negra','12-08':'Imaculada Conceição','12-25':'Natal'};
 const DEF_SCHED=[{a:false,i:'',o:''},{a:true,i:'08:00',o:'17:00'},{a:true,i:'08:00',o:'17:00'},{a:true,i:'08:00',o:'17:00'},{a:true,i:'08:00',o:'17:00'},{a:true,i:'08:00',o:'17:00'},{a:false,i:'',o:''}];
 
-let CU=null,UP={bal:0,sched:JSON.parse(JSON.stringify(DEF_SCHED)),tot:0,e100:0},ENT=[],TIPO='normal';
+let UP={bal:0,sched:JSON.parse(JSON.stringify(DEF_SCHED)),tot:0,e100:0},ENT=[],TIPO='normal';
 
-// UTILS
 const $=id=>document.getElementById(id);
 const toM=t=>{if(!t)return 0;const[h,m]=t.split(':').map(Number);return h*60+m};
 const fmtH=m=>{const n=m<0;const a=Math.abs(Math.round(m));return(n?'-':'')+Math.floor(a/60)+'h'+String(a%60).padStart(2,'0')};
@@ -333,107 +323,25 @@ const dow=d=>new Date(d+'T12:00:00').getDay();
 const dayLbl=d=>{const dt=new Date(d+'T12:00:00');return DAYS[dt.getDay()]+' '+dt.getDate()+' '+MON[dt.getMonth()]};
 const sched4=d=>UP.sched[dow(d)]||{a:false,i:'',o:''};
 
-// SCREEN
+function saveLS(){try{localStorage.setItem('tsn_v4',JSON.stringify({UP,ENT}))}catch(e){}}
+function loadLS(){try{const d=localStorage.getItem('tsn_v4');if(d){const p=JSON.parse(d);UP=p.UP||UP;ENT=p.ENT||[];if(!UP.sched)UP.sched=JSON.parse(JSON.stringify(DEF_SCHED));return true}}catch(e){}return false}
+
 function show(id){document.querySelectorAll('.scr').forEach(s=>s.classList.remove('on'));$(id).classList.add('on')}
 
-// TOAST
 window.toast=function(msg,t='ok'){const el=document.createElement('div');el.className=`toast ${t}`;el.textContent=msg;document.body.appendChild(el);setTimeout(()=>{el.style.opacity='0';setTimeout(()=>el.remove(),300)},2200)}
 
-// AUTH
-document.getElementById('btn-login').onclick=async()=>{
-  const btn=document.getElementById('btn-login');
-  btn.disabled=true;
-  btn.textContent='Redirecionando para o Google...';
-  try{
-    provider.setCustomParameters({prompt:'select_account'});
-    await signInWithRedirect(auth,provider);
-  }catch(e){
-    console.error('login error:',e);
-    toast('Erro ao fazer login. Tente novamente.','err');
-    btn.disabled=false;
-    btn.innerHTML='<svg width="20" height="20" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.18 1.48-4.97 2.31-8.16 2.31-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg> Entrar com Google';
-  }
-};
-window.doLogout=()=>confirm('Sair da conta?')&&signOut(auth);
-
-// Timeout fallback — if Firebase takes too long, show login button
-const loadTimeout = setTimeout(()=>{
-  const txt=document.getElementById('load-txt');
-  const btn=document.getElementById('btn-skip');
-  if(txt)txt.textContent='Demorando mais que o esperado...';
-  if(btn)btn.style.display='block';
-}, 5000);
-
-// Handle redirect result then watch auth
-getRedirectResult(auth).then(result=>{
-  if(result?.user) console.log('redirect ok');
-}).catch(()=>{}).finally(()=>{
-  onAuthStateChanged(auth,async u=>{
-    clearTimeout(loadTimeout);
-    if(u){CU=u;await loadData();}
-    else{CU=null;show('s-login');}
-  });
-});
-
-// FIRESTORE
-async function loadData(){
-  try{
-    const snap=await getDoc(doc(db,'users',CU.uid));
-    if(snap.exists()){
-      const d=snap.data();
-      UP={bal:d.bal||0,sched:d.sched||JSON.parse(JSON.stringify(DEF_SCHED)),tot:d.tot||0,e100:d.e100||0};
-      if(!UP.sched)UP.sched=JSON.parse(JSON.stringify(DEF_SCHED));
-      await loadEntries();
-      initMain();show('s-main');
-    } else {
-      buildSched('sched-setup',UP.sched);show('s-setup');
-    }
-  }catch(e){toast('Erro ao carregar dados','err');show('s-login');}
-}
-
-async function loadEntries(){
-  ENT=[];
-  try{
-    const q=query(collection(db,'users',CU.uid,'entries'),orderBy('date','desc'));
-    const s=await getDocs(q);
-    s.forEach(d=>ENT.push({id:d.id,...d.data()}));
-  }catch(e){}
-}
-
-async function saveProfile(){await setDoc(doc(db,'users',CU.uid),{bal:UP.bal,sched:UP.sched,tot:UP.tot,e100:UP.e100},{merge:true})}
-
-// SETUP
-window.doSetup=async function(){
-  UP.bal=Math.round((parseFloat($('setup-bal').value)||0)*60);
-  UP.tot=0;UP.e100=0;
-  readSched('sched-setup');
-  await saveProfile();
-  initMain();show('s-main');
-}
-
-// MAIN INIT
 function initMain(){
   const today=new Date().toISOString().slice(0,10);
   $('e-date').value=today;
-  updateAvatar();
-  onDateChange();
-  renderUI();
+  onDateChange();renderUI();
 }
 
-function updateAvatar(){
-  const w=$('av-wrap');
-  if(CU?.photoURL)w.innerHTML=`<img src="${CU.photoURL}" class="av" onclick="goTab('config')">`;
-  else{const i=(CU?.displayName||'?').split(' ').map(n=>n[0]).join('').slice(0,2).toUpperCase();w.innerHTML=`<div class="av-ph" onclick="goTab('config')">${i}</div>`;}
-}
-
-// TABS
 window.goTab=function(t){
-  ['resumo','lancar','historico','config'].forEach(id=>{$('t-'+id).style.display=id===t?'block':'none'});
+  ['resumo','lancar','historico','config'].forEach(id=>$('t-'+id).style.display=id===t?'block':'none');
   document.querySelectorAll('.tab').forEach((el,i)=>el.classList.toggle('on',['resumo','lancar','historico','config'][i]===t));
   if(t==='config')loadCfgTab();
 }
 
-// DATE / TYPE
 window.onDateChange=function(){
   const d=$('e-date').value;if(!d)return;
   const sc=sched4(d);
@@ -476,64 +384,52 @@ function calc(){
   return spec?{extra:worked,raw:worked,spec:true}:{extra:worked-daily,raw:worked,spec:false};
 }
 
-// ADD ENTRY
-window.doAdd=async function(){
+window.doSetup=function(){
+  UP.bal=Math.round((parseFloat($('setup-bal').value)||0)*60);
+  UP.tot=0;UP.e100=0;
+  readSched('sched-setup');
+  saveLS();initMain();show('s-main');
+}
+
+window.doAdd=function(){
   const d=$('e-date').value;if(!d){toast('Selecione a data','err');return;}
   const ei=$('e-in').value,eo=$('e-out').value;
   if(!ei||!eo){toast('Preencha entrada e saída','err');return;}
   const r=calc();if(!r)return;
-  const btn=$('btn-add');btn.disabled=true;btn.textContent='Salvando...';
-  try{
-    const entry={date:d,ei,eo,extra:r.extra,raw:r.raw,spec:r.spec,tipo:TIPO,ts:Date.now()};
-    const ref=await addDoc(collection(db,'users',CU.uid,'entries'),entry);
-    ENT.unshift({id:ref.id,...entry});
-    UP.bal+=r.extra;UP.tot+=r.raw;
-    if(r.spec)UP.e100+=r.raw;
-    await saveProfile();
-    renderUI();setTipo('normal');goTab('resumo');toast('Lançamento salvo!');
-  }catch(e){toast('Erro ao salvar','err');}
-  btn.disabled=false;btn.textContent='Lançar dia';
+  const entry={date:d,ei,eo,extra:r.extra,raw:r.raw,spec:r.spec,tipo:TIPO,id:Date.now()};
+  ENT.unshift(entry);
+  UP.bal+=r.extra;UP.tot+=r.raw;
+  if(r.spec)UP.e100+=r.raw;
+  saveLS();renderUI();setTipo('normal');goTab('resumo');toast('Lançamento salvo!');
 }
 
-// DELETE
-window.delEntry=async function(id){
+window.delEntry=function(id){
   if(!confirm('Excluir este lançamento?'))return;
-  try{
-    const idx=ENT.findIndex(e=>e.id===id);if(idx<0)return;
-    const e=ENT[idx];
-    await deleteDoc(doc(db,'users',CU.uid,'entries',id));
-    UP.bal-=e.extra;UP.tot-=e.raw;
-    if(e.spec)UP.e100-=e.raw;
-    ENT.splice(idx,1);
-    await saveProfile();renderUI();toast('Excluído');
-  }catch(e){toast('Erro','err');}
+  const idx=ENT.findIndex(e=>e.id===id);if(idx<0)return;
+  const e=ENT[idx];
+  UP.bal-=e.extra;UP.tot-=e.raw;
+  if(e.spec)UP.e100-=e.raw;
+  ENT.splice(idx,1);
+  saveLS();renderUI();toast('Excluído');
 }
 
-// CONFIG
 function loadCfgTab(){
   $('cfg-bal').value=(UP.bal/60).toFixed(1);
   buildSched('sched-cfg',UP.sched);
-  const u=CU;
-  $('cfg-user').innerHTML=`<div class="ucard">${u.photoURL?`<img src="${u.photoURL}" class="uav">`:'<div class="av-ph" style="width:44px;height:44px;font-size:16px">'+(u.displayName||'?').split(' ').map(n=>n[0]).join('').slice(0,2).toUpperCase()+'</div>'}<div><div class="uname">${u.displayName||'Usuário'}</div><div class="uemail">${u.email}</div></div></div>`;
 }
 
-window.doSaveCfg=async function(){
+window.doSaveCfg=function(){
   UP.bal=Math.round((parseFloat($('cfg-bal').value)||0)*60);
   readSched('sched-cfg');
-  await saveProfile();renderUI();toast('Configuração salva!');
+  saveLS();renderUI();toast('Configuração salva!');
 }
 
-window.doReset=async function(){
+window.doReset=function(){
   if(!confirm('Apagar todos os lançamentos?'))return;
-  try{
-    const snap=await getDocs(collection(db,'users',CU.uid,'entries'));
-    for(const d of snap.docs)await deleteDoc(d.ref);
-    ENT=[];UP.e100=0;UP.tot=0;
-    await saveProfile();renderUI();toast('Lançamentos apagados');
-  }catch(e){toast('Erro','err');}
+  ENT=[];UP.e100=0;UP.tot=0;
+  saveLS();renderUI();toast('Lançamentos apagados');
 }
 
-// SCHEDULE HELPERS
 function buildSched(tbId,sc){
   const tb=$(tbId);if(!tb)return;tb.innerHTML='';
   for(let i=1;i<=6;i++){
@@ -561,7 +457,6 @@ function readSched(tbId){
   }
 }
 
-// RENDER
 function renderUI(){
   const b=UP.bal;
   const el=$('v-bal');
@@ -588,10 +483,22 @@ function renderList(list,lim){
         <div class="lsub">${e.ei} – ${e.eo} · ${fmtH(e.raw)} trabalhado</div>
       </div>
       <div class="lextra ${pos?'g':'r'}">${pos?'+':''}${fmtH(e.extra)}</div>
-      <button class="ldel" onclick="delEntry('${e.id}')">✕</button>
+      <button class="ldel" onclick="delEntry(${e.id})">✕</button>
     </div>`;
   }).join('');
 }
+
+// INIT
+if(loadLS()){
+  show('s-main');initMain();
+} else {
+  buildSched('sched-setup',UP.sched);
+  show('s-setup');
+}
+
+$('e-date').addEventListener('change',onDateChange);
+$('e-in').addEventListener('change',onTimeChange);
+$('e-out').addEventListener('change',onTimeChange);
 
 if('serviceWorker' in navigator)navigator.serviceWorker.register('./sw.js').catch(()=>{});
 </script>
