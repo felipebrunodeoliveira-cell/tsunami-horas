@@ -250,8 +250,8 @@ html,body{height:100%;background:var(--bg);font-family:-apple-system,BlinkMacSys
     <!-- RESUMO -->
     <div id="t-resumo" class="pane">
       <div class="mgrid">
-        <div class="met"><div class="mlbl">Saldo atual</div><div class="mval" id="v-bal">0h00</div><div class="prog"><div class="pb" id="v-bar" style="width:0%"></div></div></div>
-        <div class="met"><div class="mlbl">Extras 100%</div><div class="mval amb" id="v-100">0h00</div></div>
+        <div class="met"><div class="mlbl">Saldo (extras 50%)</div><div class="mval" id="v-bal">0h00</div><div class="prog"><div class="pb" id="v-bar" style="width:0%"></div></div></div>
+        <div class="met"><div class="mlbl">Extras 100% (fer/dom)</div><div class="mval amb" id="v-100">0h00</div></div>
       </div>
       <div class="mgrid">
         <div class="met"><div class="mlbl">Dias lançados</div><div class="mval" id="v-days" style="font-size:32px">0</div></div>
@@ -368,7 +368,7 @@ window.onTimeChange=function(){
   const r=calc();
   if(!r){bar.style.display='none';return;}
   bar.style.display='block';
-  if(r.spec){bar.className='info w';bar.textContent='Trabalhado: '+fmtH(r.raw)+' — registrado como 100% extra';}
+  if(r.spec){bar.className='info w';bar.textContent='Trabalhado: '+fmtH(r.raw)+' — vai para Extras 100% (separado do saldo)';}
   else if(r.extra>0){bar.className='info g';bar.textContent='Horas extras: +'+fmtH(r.extra)+' no saldo';}
   else if(r.extra<0){bar.className='info d';bar.textContent='Saída antecipada: '+fmtH(r.extra)+' no saldo';}
   else{bar.className='info n';bar.textContent='Jornada completa — saldo inalterado';}
@@ -398,8 +398,12 @@ window.doAdd=function(){
   const r=calc();if(!r)return;
   const entry={date:d,ei,eo,extra:r.extra,raw:r.raw,spec:r.spec,tipo:TIPO,id:Date.now()};
   ENT.unshift(entry);
-  UP.bal+=r.extra;UP.tot+=r.raw;
-  if(r.spec)UP.e100+=r.raw;
+  UP.tot+=r.raw;
+  if(r.spec){
+    UP.e100+=r.raw;  // 100% vai separado, NAO entra no saldo
+  } else {
+    UP.bal+=r.extra; // só extras normais entram no saldo
+  }
   saveLS();renderUI();setTipo('normal');goTab('resumo');toast('Lançamento salvo!');
 }
 
@@ -407,8 +411,12 @@ window.delEntry=function(id){
   if(!confirm('Excluir este lançamento?'))return;
   const idx=ENT.findIndex(e=>e.id===id);if(idx<0)return;
   const e=ENT[idx];
-  UP.bal-=e.extra;UP.tot-=e.raw;
-  if(e.spec)UP.e100-=e.raw;
+  UP.tot-=e.raw;
+  if(e.spec){
+    UP.e100-=e.raw; // remove do 100%
+  } else {
+    UP.bal-=e.extra; // remove do saldo normal
+  }
   ENT.splice(idx,1);
   saveLS();renderUI();toast('Excluído');
 }
