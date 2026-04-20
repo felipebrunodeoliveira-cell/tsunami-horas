@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tsunami Horas — Admin</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{--bg:#0a0e1a;--surf:#0d1220;--surf2:#111827;--b1:#1e2a42;--b2:#2a3a55;--cyan:#00d4ff;--cdim:#00d4ff22;--cmid:#00d4ff55;--tx:#e2e8f0;--tx2:#8899aa;--tx3:#4a5568;--grn:#10b981;--gdim:#10b98122;--red:#f43f5e;--rdim:#f43f5e22;--amb:#f59e0b}
+body{background:var(--bg);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;color:var(--tx);min-height:100vh}
+.wrap{max-width:900px;margin:0 auto;padding:2rem 1rem}
+
+/* ADMIN LOGIN */
+.admin-login{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;gap:16px}
+.admin-title{font-size:24px;font-weight:800;color:var(--tx)}
+.admin-sub{font-size:13px;color:var(--tx2)}
+.admin-input{width:280px;height:50px;padding:0 16px;background:var(--surf);border:1px solid var(--b2);border-radius:10px;font-size:16px;color:var(--tx);text-align:center;letter-spacing:2px;outline:none}
+.admin-input:focus{border-color:var(--cyan)}
+.btn{height:48px;padding:0 24px;border:none;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;transition:opacity .15s}
+.btn:active{opacity:.8}
+.btn.pri{background:var(--cyan);color:#0a0e1a}
+.btn.dan{background:transparent;border:1px solid var(--red);color:var(--red)}
+.btn.gho{background:transparent;border:1px solid var(--b2);color:var(--tx2)}
+.btn.grn{background:var(--grn);color:#fff}
+.btn.sm{height:36px;font-size:13px}
+
+/* HEADER */
+.hdr{background:var(--surf);border-bottom:1px solid var(--b1);padding:16px 24px;display:flex;align-items:center;gap:12px;margin-bottom:2rem}
+.hdr-logo{display:flex;align-items:center;gap:10px}
+.hdr-title{font-size:16px;font-weight:800}
+.hdr-badge{font-size:10px;background:var(--cdim);color:var(--cyan);border:1px solid var(--cmid);padding:3px 10px;border-radius:20px;font-weight:700;letter-spacing:.5px}
+.hdr-right{margin-left:auto}
+
+/* STATS */
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin-bottom:2rem}
+.stat{background:var(--surf);border:1px solid var(--b1);border-radius:12px;padding:16px}
+.stat-label{font-size:11px;color:var(--tx2);margin-bottom:6px;text-transform:uppercase;letter-spacing:.5px}
+.stat-value{font-size:28px;font-weight:800;color:var(--tx)}
+.stat-value.cyan{color:var(--cyan)}
+.stat-value.grn{color:var(--grn)}
+.stat-value.red{color:var(--red)}
+
+/* NEW LICENSE */
+.new-card{background:var(--surf);border:1px solid var(--b1);border-radius:14px;padding:20px;margin-bottom:2rem}
+.card-title{font-size:11px;font-weight:700;color:var(--tx3);text-transform:uppercase;letter-spacing:1px;margin-bottom:16px}
+.form-row{display:flex;gap:10px;align-items:flex-end;flex-wrap:wrap}
+.fld{display:flex;flex-direction:column;gap:6px;flex:1;min-width:160px}
+.fld label{font-size:12px;font-weight:600;color:var(--tx2);text-transform:uppercase;letter-spacing:.3px}
+.fld input{height:46px;padding:0 14px;background:var(--surf2);border:1px solid var(--b1);border-radius:10px;font-size:14px;color:var(--tx);outline:none}
+.fld input:focus{border-color:var(--cyan)}
+
+/* LICENSE LIST */
+.list-card{background:var(--surf);border:1px solid var(--b1);border-radius:14px;padding:20px}
+.search-bar{width:100%;height:44px;padding:0 14px;background:var(--surf2);border:1px solid var(--b1);border-radius:10px;font-size:14px;color:var(--tx);outline:none;margin-bottom:16px}
+.search-bar:focus{border-color:var(--cyan)}
+.lic-item{display:flex;align-items:center;gap:12px;padding:14px 0;border-bottom:1px solid var(--b1)}
+.lic-item:last-child{border-bottom:none}
+.lic-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+.lic-dot.on{background:var(--grn)}
+.lic-dot.off{background:var(--red)}
+.lic-dot.blocked{background:var(--amb)}
+.lic-info{flex:1;min-width:0}
+.lic-name{font-size:15px;font-weight:700;color:var(--tx)}
+.lic-code{font-size:12px;color:var(--cyan);font-family:monospace;letter-spacing:1px;margin-top:2px}
+.lic-meta{font-size:11px;color:var(--tx3);margin-top:3px}
+.lic-actions{display:flex;gap:6px;flex-shrink:0}
+.status-badge{font-size:10px;padding:3px 8px;border-radius:6px;font-weight:700}
+.status-badge.on{background:var(--gdim);color:var(--grn)}
+.status-badge.off{background:var(--rdim);color:var(--red)}
+.status-badge.blocked{background:#f59e0b22;color:var(--amb)}
+.empty{text-align:center;padding:3rem;color:var(--tx3);font-size:14px}
+.copy-btn{background:none;border:none;cursor:pointer;color:var(--tx3);font-size:13px;padding:2px 6px;border-radius:4px}
+.copy-btn:hover{color:var(--cyan)}
+.generated-code{background:var(--surf2);border:1px solid var(--cmid);border-radius:10px;padding:12px 16px;font-size:18px;font-weight:800;color:var(--cyan);letter-spacing:3px;text-align:center;font-family:monospace;margin-top:12px;display:none}
+.toast{position:fixed;top:20px;left:50%;transform:translateX(-50%);padding:10px 22px;border-radius:10px;font-size:14px;font-weight:700;z-index:9999;pointer-events:none;white-space:nowrap}
+.toast.ok{background:var(--grn);color:#fff}
+.toast.err{background:var(--red);color:#fff}
+</style>
+</head>
+<body>
+
+<!-- ADMIN LOGIN -->
+<div id="admin-login" class="admin-login">
+  <svg width="56" height="56" viewBox="0 0 52 52" fill="none">
+    <rect width="52" height="52" rx="12" fill="#111827"/>
+    <line x1="10" y1="14" x2="42" y2="14" stroke="#00d4ff" stroke-width="3.5" stroke-linecap="round"/>
+    <line x1="26" y1="14" x2="26" y2="34" stroke="#00d4ff" stroke-width="3.5" stroke-linecap="round"/>
+    <path d="M8 42 Q13 37 18 41 Q23 45 28 40 Q33 35 38 39 Q41 41 44 39" stroke="#7c3aed" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+  </svg>
+  <div class="admin-title">Painel Admin</div>
+  <div class="admin-sub">Tsunami Horas</div>
+  <input class="admin-input" type="password" id="admin-pass" placeholder="Senha do painel" onkeydown="if(event.key==='Enter')adminLogin()">
+  <button class="btn pri" onclick="adminLogin()">Entrar</button>
+</div>
+
+<!-- MAIN PANEL -->
+<div id="admin-panel" style="display:none">
+  <div class="hdr">
+    <div class="hdr-logo">
+      <svg width="32" height="32" viewBox="0 0 52 52" fill="none">
+        <rect width="52" height="52" rx="12" fill="#111827"/>
+        <line x1="10" y1="14" x2="42" y2="14" stroke="#00d4ff" stroke-width="3.5" stroke-linecap="round"/>
+        <line x1="26" y1="14" x2="26" y2="34" stroke="#00d4ff" stroke-width="3.5" stroke-linecap="round"/>
+        <path d="M8 42 Q13 37 18 41 Q23 45 28 40 Q33 35 38 39 Q41 41 44 39" stroke="#7c3aed" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+      </svg>
+      <span class="hdr-title">Tsunami Horas</span>
+      <span class="hdr-badge">ADMIN</span>
+    </div>
+    <div class="hdr-right"><button class="btn gho sm" onclick="adminLogout()">Sair</button></div>
+  </div>
+
+  <div class="wrap">
+    <!-- STATS -->
+    <div class="stats">
+      <div class="stat"><div class="stat-label">Total de licenças</div><div class="stat-value cyan" id="st-total">0</div></div>
+      <div class="stat"><div class="stat-label">Ativas</div><div class="stat-value grn" id="st-active">0</div></div>
+      <div class="stat"><div class="stat-label">Desativadas</div><div class="stat-value red" id="st-inactive">0</div></div>
+      <div class="stat"><div class="stat-label">Bloqueadas</div><div class="stat-value" style="color:var(--amb)" id="st-blocked">0</div></div>
+    </div>
+
+    <!-- NEW LICENSE -->
+    <div class="new-card">
+      <div class="card-title">Gerar nova licença</div>
+      <div class="form-row">
+        <div class="fld">
+          <label>Nome do cliente</label>
+          <input type="text" id="new-name" placeholder="Ex: João Silva">
+        </div>
+        <div class="fld" style="max-width:200px">
+          <label>Código personalizado (opcional)</label>
+          <input type="text" id="new-code" placeholder="Auto-gerado" maxlength="12" style="text-transform:uppercase;letter-spacing:2px">
+        </div>
+        <button class="btn grn" style="flex-shrink:0" onclick="generateLicense()">Gerar licença</button>
+      </div>
+      <div class="generated-code" id="generated-code"></div>
+    </div>
+
+    <!-- LIST -->
+    <div class="list-card">
+      <div class="card-title">Licenças cadastradas</div>
+      <input class="search-bar" type="text" id="search" placeholder="Buscar por nome ou código..." oninput="renderList()">
+      <div id="lic-list"><div class="empty">Carregando...</div></div>
+    </div>
+  </div>
+</div>
+
+<script type="module">
+import{initializeApp}from'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
+import{getFirestore,doc,getDoc,setDoc,updateDoc,collection,getDocs,query,orderBy}from'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+
+const fbApp=initializeApp({apiKey:"AIzaSyDHQjCocBu9xYUwn-zL4Eey1zUTOXQq51E",authDomain:"tsunami-horas.firebaseapp.com",projectId:"tsunami-horas",storageBucket:"tsunami-horas.firebasestorage.app",messagingSenderId:"699377406772",appId:"1:699377406772:web:9c69a90fa90f783b6f0b61"});
+const db=getFirestore(fbApp);
+
+const ADMIN_PASS='tsunami@admin2024';
+let licenses=[];
+
+function $(id){return document.getElementById(id)}
+
+window.toast=function(msg,t='ok'){
+  const el=document.createElement('div');el.className=`toast ${t}`;el.textContent=msg;
+  document.body.appendChild(el);
+  setTimeout(()=>el.remove(),2200);
+}
+
+window.adminLogin=function(){
+  const pass=$('admin-pass').value;
+  if(pass===ADMIN_PASS){
+    $('admin-login').style.display='none';
+    $('admin-panel').style.display='block';
+    loadLicenses();
+  } else {
+    toast('Senha incorreta','err');
+  }
+}
+
+window.adminLogout=function(){
+  $('admin-login').style.display='flex';
+  $('admin-panel').style.display='none';
+  $('admin-pass').value='';
+}
+
+async function loadLicenses(){
+  try{
+    const snap=await getDocs(collection(db,'licenses'));
+    licenses=[];
+    snap.forEach(d=>licenses.push({id:d.id,...d.data()}));
+    licenses.sort((a,b)=>(b.createdAt||0)-(a.createdAt||0));
+    updateStats();renderList();
+  }catch(e){toast('Erro ao carregar licenças','err');}
+}
+
+function updateStats(){
+  $('st-total').textContent=licenses.length;
+  $('st-active').textContent=licenses.filter(l=>l.active&&!l.blocked).length;
+  $('st-inactive').textContent=licenses.filter(l=>!l.active).length;
+  $('st-blocked').textContent=licenses.filter(l=>l.blocked).length;
+}
+
+window.renderList=function(){
+  const q=($('search').value||'').toLowerCase();
+  const filtered=q?licenses.filter(l=>(l.name||'').toLowerCase().includes(q)||l.id.toLowerCase().includes(q)):licenses;
+  if(!filtered.length){$('lic-list').innerHTML='<div class="empty">Nenhuma licença encontrada</div>';return;}
+  $('lic-list').innerHTML=filtered.map(l=>{
+    const status=l.blocked?'blocked':l.active?'on':'off';
+    const statusLabel=l.blocked?'Bloqueada':l.active?'Ativa':'Desativada';
+    const lastAccess=l.lastAccess?.seconds?new Date(l.lastAccess.seconds*1000).toLocaleDateString('pt-BR',{day:'2-digit',month:'2-digit',year:'2-digit',hour:'2-digit',minute:'2-digit'}):'Nunca acessado';
+    const accessCount=l.accessCount||0;
+    return`<div class="lic-item">
+      <div class="lic-dot ${status}"></div>
+      <div class="lic-info">
+        <div class="lic-name">${l.name||'Sem nome'}</div>
+        <div class="lic-code">${l.id} <button class="copy-btn" onclick="copyCode('${l.id}')">copiar</button></div>
+        <div class="lic-meta">Último acesso: ${lastAccess} · ${accessCount} acesso${accessCount!==1?'s':''} · ${l.deviceId?'Dispositivo registrado':'Sem dispositivo'}</div>
+      </div>
+      <div class="lic-actions">
+        <span class="status-badge ${status}">${statusLabel}</span>
+        ${l.blocked?`<button class="btn sm gho" onclick="unblockLic('${l.id}')">Desbloquear</button>`:''}
+        ${l.active&&!l.blocked?`<button class="btn sm dan" onclick="toggleLic('${l.id}',false)">Desativar</button>`:''}
+        ${!l.active?`<button class="btn sm" style="height:36px;font-size:13px;background:var(--grn);color:#fff;border:none;border-radius:8px;padding:0 12px;cursor:pointer" onclick="toggleLic('${l.id}',true)">Ativar</button>`:''}
+        ${l.deviceId?`<button class="btn sm gho" onclick="resetDevice('${l.id}')">Resetar dispositivo</button>`:''}
+      </div>
+    </div>`;
+  }).join('');
+}
+
+window.generateLicense=async function(){
+  const name=$('new-name').value.trim();
+  if(!name){toast('Digite o nome do cliente','err');return;}
+  let code=$('new-code').value.trim().toUpperCase();
+  if(!code){
+    const chars='ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+    code=Array.from({length:8},()=>chars[Math.floor(Math.random()*chars.length)]).join('');
+  }
+  try{
+    const existing=await getDoc(doc(db,'licenses',code));
+    if(existing.exists()){toast('Código já existe, tente outro','err');return;}
+    await setDoc(doc(db,'licenses',code),{name,active:true,blocked:false,createdAt:Date.now(),deviceId:null,accessCount:0});
+    licenses.unshift({id:code,name,active:true,blocked:false,createdAt:Date.now(),deviceId:null,accessCount:0});
+    updateStats();renderList();
+    const gc=$('generated-code');
+    gc.style.display='block';
+    gc.innerHTML=`${code} <button class="copy-btn" onclick="copyCode('${code}')" style="font-size:14px">📋 copiar</button>`;
+    $('new-name').value='';$('new-code').value='';
+    toast(`Licença criada para ${name}!`);
+  }catch(e){toast('Erro ao criar licença','err');}
+}
+
+window.toggleLic=async function(code,active){
+  try{
+    await updateDoc(doc(db,'licenses',code),{active,blocked:false});
+    const l=licenses.find(l=>l.id===code);if(l){l.active=active;l.blocked=false;}
+    updateStats();renderList();
+    toast(active?'Licença ativada!':'Licença desativada!');
+  }catch(e){toast('Erro ao atualizar','err');}
+}
+
+window.unblockLic=async function(code){
+  try{
+    await updateDoc(doc(db,'licenses',code),{blocked:false,active:true,deviceId:null});
+    const l=licenses.find(l=>l.id===code);if(l){l.blocked=false;l.active=true;l.deviceId=null;}
+    updateStats();renderList();
+    toast('Licença desbloqueada!');
+  }catch(e){toast('Erro','err');}
+}
+
+window.resetDevice=async function(code){
+  if(!confirm('Resetar dispositivo? O cliente poderá usar em outro celular.'))return;
+  try{
+    await updateDoc(doc(db,'licenses',code),{deviceId:null,blocked:false});
+    const l=licenses.find(l=>l.id===code);if(l){l.deviceId=null;l.blocked=false;}
+    renderList();toast('Dispositivo resetado!');
+  }catch(e){toast('Erro','err');}
+}
+
+window.copyCode=function(code){
+  navigator.clipboard.writeText(code).then(()=>toast('Código copiado!')).catch(()=>{
+    const el=document.createElement('textarea');el.value=code;document.body.appendChild(el);el.select();document.execCommand('copy');el.remove();toast('Código copiado!');
+  });
+}
+</script>
+</body>
+</html>
